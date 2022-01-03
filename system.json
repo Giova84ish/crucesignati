@@ -4,7 +4,7 @@
   "description": "Compatibile con FG&G",
   "version": "2.0.0",
   "minimumCoreVersion": "0.8.6",
-  "compatibleCoreVersion": "0.8.7",
+  "compatibleCoreVersion": "9.0",
   "templateVersion": 1,
   "author": "Giovanni Gori",
   "esmodules": ["crucesignati.js"],
