@@ -26,7 +26,7 @@
   "gridDistance": 1,
   "gridUnits": "mt",
   "url": "https://github.com/Giova84ish/crucesignati/tree/master/crucesignati",
-  "manifest": "https://github.com/Giova84ish/crucesignati/tree/master/crucesignati/system.json",
+  "manifest": "https://github.com/Giova84ish/crucesignati/blob/master/system.json",
   "license": "OGL.txt",
-  "download": ""
+  "download": "https://github.com/Giova84ish/crucesignati/archive/refs/heads/master.zip"
 }
