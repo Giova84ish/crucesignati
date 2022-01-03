@@ -25,7 +25,8 @@
   ],
   "gridDistance": 1,
   "gridUnits": "mt",
-  "url": "www.crucesignati.eu",
-  "manifest": "",
+  "url": "https://github.com/Giova84ish/crucesignati/tree/master/crucesignati",
+  "manifest": "https://github.com/Giova84ish/crucesignati/tree/master/crucesignati/system.json",
+  "license": "OGL.txt",
   "download": ""
 }
