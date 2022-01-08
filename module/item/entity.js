@@ -1,9 +1,9 @@
-import { OseDice } from "../dice.js";
+import { CrucesignatiDice } from "../dice.js";
 
 /**
  * Override and extend the basic :class:`Item` implementation
  */
-export class OseItem extends Item {
+export class CrucesignatiItem extends Item {
   // Replacing default image */
   static get defaultIcons() {
     return {
@@ -73,7 +73,7 @@ export class OseItem extends Item {
     if (data.missile && data.melee && !isNPC) {
       // Dialog
       new Dialog({
-        title: "Chocrucesignati Attack Range",
+        title: "Choose Attack Range",
         content: "",
         buttons: {
           melee: {
@@ -123,7 +123,7 @@ export class OseItem extends Item {
     };
 
     // Roll and return
-    return OseDice.Roll({
+    return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
       data: newData,

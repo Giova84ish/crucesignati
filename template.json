@@ -9,9 +9,9 @@
           "wage": ""
         },
         "hp": {
-          "hd": "1d8",
-          "value": 20,
-          "max": 20
+          "hd": "1d10",
+          "value": 10,
+          "max": 10
         },
         "ac": {
           "value": 0,
@@ -87,7 +87,7 @@
       "details": {
         "biography": "",
         "notes": "",
-        "class": "warrior",
+        "class": "",
         "race": "",
         "straordinaryStrenght": 0,
         "title": "",
@@ -108,27 +108,27 @@
       },
       "scores": {
         "str": {
-          "value": 0,
+          "value": 9,
           "bonus": 0
         },
         "int": {
-          "value": 0,
+          "value": 9,
           "bonus": 0
         },
         "wis": {
-          "value": 0,
+          "value": 9,
           "bonus": 0
         },
         "dex": {
-          "value": 0,
+          "value": 9,
           "bonus": 0
         },
         "con": {
-          "value": 0,
+          "value": 9,
           "bonus": 0
         },
         "cha": {
-          "value": 0,
+          "value": 9,
           "bonus": 0
         }
       },
@@ -186,8 +186,9 @@
       "save": false,
       "pattern": "transparent",
       "description": "",
-      "damage": "1d6",
+      "damage": "1d3",
       "bonus": 0,
+      "speed": 6,
       "tags": [],
       "slow": false,
       "missile": false,
@@ -212,8 +213,8 @@
       "containerId": ""
     },
     "spell": {
-      "lvl": 9,
-      "class": "Mago",
+      "lvl": 1,
+      "class": "",
       "duration": "",
       "range": "",
       "roll": "",

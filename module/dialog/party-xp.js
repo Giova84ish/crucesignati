@@ -1,4 +1,4 @@
-export class OsePartyXP extends FormApplication {
+export class CrucesignatiPartyXP extends FormApplication {
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {

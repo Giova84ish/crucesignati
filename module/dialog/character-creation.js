@@ -1,7 +1,7 @@
-import { OseActor } from "../actor/entity.js";
-import { OseDice } from "../dice.js";
+import { CrucesignatiActor } from "../actor/entity.js";
+import { CrucesignatiDice } from "../dice.js";
 
-export class OseCharacterCreator extends FormApplication {
+export class CrucesignatiCharacterCreator extends FormApplication {
   static get defaultOptions() {
     const options = super.defaultOptions;
     (options.classes = ["crucesignati", "dialog", "creator"]),
@@ -100,7 +100,7 @@ export class OseCharacterCreator extends FormApplication {
       return new Roll(rollParts[0]).evaluate({ async: false });
     }
     // Roll and return
-    return OseDice.Roll({
+    return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
       data: data,

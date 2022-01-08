@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
-import { OseActor } from '../actor/entity.js';
+import { CrucesignatiActor } from '../actor/entity.js';
 
-export class OseEntityTweaks extends FormApplication {
+export class CrucesignatiEntityTweaks extends FormApplication {
   static get defaultOptions() {
     const options = super.defaultOptions;
     options.id = 'sheet-tweaks';

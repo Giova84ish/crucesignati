@@ -1,6 +1,6 @@
-import { OsePartyXP } from "./party-xp.js";
+import { CrucesignatiPartyXP } from "./party-xp.js";
 
-export class OsePartySheet extends FormApplication {
+export class CrucesignatiPartySheet extends FormApplication {
   
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -55,7 +55,7 @@ export class OsePartySheet extends FormApplication {
   /* -------------------------------------------- */
 
   async _dealXP(ev) {
-    new OsePartyXP(this.object, {}).render(true);
+    new CrucesignatiPartyXP(this.object, {}).render(true);
   }
 
   async _selectActors(ev) {

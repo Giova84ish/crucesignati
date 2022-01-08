@@ -1,10 +1,10 @@
-import { OseActor } from "./entity.js";
-import { OseActorSheet } from "./actor-sheet.js";
+import { CrucesignatiActor } from "./entity.js";
+import { CrucesignatiActorSheet } from "./actor-sheet.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  */
-export class OseActorSheetMonster extends OseActorSheet {
+export class CrucesignatiActorSheetMonster extends CrucesignatiActorSheet {
   constructor(...args) {
     super(...args);
   }
@@ -170,7 +170,7 @@ export class OseActorSheetMonster extends OseActorSheet {
 
   /* -------------------------------------------- */
 
-  async _chocrucesignatiItemType(choices = ["weapon", "armor", "shield", "gear"]) {
+  async _chooseItemType(choices = ["weapon", "armor", "shield", "gear"]) {
     let templateData = { types: choices },
       dlg = await renderTemplate(
         "systems/crucesignati/templates/items/entity-create.html",
@@ -290,7 +290,7 @@ export class OseActorSheetMonster extends OseActorSheet {
       // Getting back to main logic
       if (type == "choice") {
         const choices = header.dataset.choices.split(",");
-        this._chocrucesignatiItemType(choices).then((dialogInput) => {
+        this._chooseItemType(choices).then((dialogInput) => {
           const itemData = createItem(dialogInput.type, dialogInput.name);
           this.actor.createEmbeddedDocuments("Item", [itemData], {});
         });

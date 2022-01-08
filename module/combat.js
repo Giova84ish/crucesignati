@@ -1,4 +1,4 @@
-export class OseCombat {
+export class CrucesignatiCombat {
   static STATUS_SLOW = -789;
   static STATUS_DIZZY = -790;
 
@@ -14,7 +14,7 @@ export class OseCombat {
 
     // Roll init
     Object.keys(groups).forEach((group) => {
-      let roll = new Roll("1d6").evaluate({async: false});
+      let roll = new Roll("1d10").evaluate({async: false});
       roll.toMessage({
         flavor: game.i18n.format('CRUCESIGNATI.roll.initiative', { group: CONFIG["CRUCESIGNATI"].colors[group] }),
       });
@@ -27,7 +27,7 @@ export class OseCombat {
         return;
       }
       if (data.combatants[i].actor.data.data.isSlow) {
-        data.combatants[i].update({initiative: OseCombat.STATUS_SLOW});
+        data.combatants[i].update({initiative: CrucesignatiCombat.STATUS_SLOW});
       } else {
         const group = data.combatants[i].getFlag("crucesignati", "group");
         data.combatants[i].update({initiative: groups[group].initiative});
@@ -54,7 +54,7 @@ export class OseCombat {
       const roll = c.getInitiativeRoll(cf);
       let value = roll.total;
       if (combat.settings.skipDefeated && c.defeated) {
-        value = OseCombat.STATUS_DIZZY;
+        value = CrucesignatiCombat.STATUS_DIZZY;
       }
       updates.push({ _id: c.id, initiative: value });
 
@@ -89,11 +89,11 @@ export class OseCombat {
   static format(object, html, user) {
     html.find(".initiative").each((_, span) => {
       span.innerHTML =
-        span.innerHTML == `${OseCombat.STATUS_SLOW}`
+        span.innerHTML == `${CrucesignatiCombat.STATUS_SLOW}`
           ? '<i class="fas fa-weight-hanging"></i>'
           : span.innerHTML;
       span.innerHTML =
-        span.innerHTML == `${OseCombat.STATUS_DIZZY}`
+        span.innerHTML == `${CrucesignatiCombat.STATUS_DIZZY}`
           ? '<i class="fas fa-dizzy"></i>'
           : span.innerHTML;
     });
@@ -113,7 +113,7 @@ export class OseCombat {
         `<a class='combatant-control prepare-spell ${spellActive}'><i class='fas fa-magic'></i></a>`
       );
     });
-    OseCombat.announceListener(html);
+    CrucesignatiCombat.announceListener(html);
 
     let init = game.settings.get("crucesignati", "initiative") === "group";
     if (!init) {
@@ -143,7 +143,7 @@ export class OseCombat {
         `<a class='combatant-control flag' style='color:${color}' title="${CONFIG.CRUCESIGNATI.colors[color]}"><i class='fas fa-flag'></i></a>`
       );
     });
-    OseCombat.addListeners(html);
+    CrucesignatiCombat.addListeners(html);
   }
 
   static updateCombatant(combatant, data) {
@@ -215,7 +215,7 @@ export class OseCombat {
         return;
       }
       let data = {};
-      OseCombat.rollInitiative(game.combat, data);
+      CrucesignatiCombat.rollInitiative(game.combat, data);
       game.combat.update({ data: data }).then(() => {
         game.combat.setupTurns();
       });
@@ -252,7 +252,7 @@ export class OseCombat {
     options.unshift({
       name: "Set Active",
       icon: '<i class="fas fa-star-of-life"></i>',
-      callback: OseCombat.activateCombatant
+      callback: CrucesignatiCombat.activateCombatant
     });
   }
 
@@ -264,16 +264,16 @@ export class OseCombat {
     }
     if (data.round !== 1) {
       if (reroll === "reset") {
-        OseCombat.resetInitiative(combat, data, diff, id);
+        CrucesignatiCombat.resetInitiative(combat, data, diff, id);
         return;
       } else if (reroll === "keep") {
         return;
       }
     }
     if (init === "group") {
-      OseCombat.rollInitiative(combat, data, diff, id);
+      CrucesignatiCombat.rollInitiative(combat, data, diff, id);
     } else if (init === "individual") {
-      OseCombat.individualInitiative(combat, data, diff, id);
+      CrucesignatiCombat.individualInitiative(combat, data, diff, id);
     }
   }
 }
