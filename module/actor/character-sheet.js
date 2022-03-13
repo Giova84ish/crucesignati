@@ -277,12 +277,12 @@ export class CrucesignatiActorSheetCharacter extends CrucesignatiActorSheet {
           })
           return acc;
         }, []);
-        this.actor.updateEmbeddedFiles("Item", updateData).then(() => {
-          this.actor.deleteEmbeddedFiles("Item", [li.dataset.itemId]);
+        this.actor.updateEmbeddedDocuments("Item", updateData).then(() => {
+          this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
         });
         return;
       }
-      this.actor.deleteEmbeddedFiles("Item", [li.dataset.itemId]);
+      this.actor.deleteEmbeddedDocuments("Item", [li.dataset.itemId]);
       $(li).slideUp(200, () => this.render(false));
     });
 
@@ -313,7 +313,7 @@ export class CrucesignatiActorSheetCharacter extends CrucesignatiActorSheet {
         data: duplicate(header.dataset),
       };
       delete itemData.data["type"];
-      return this.actor.createEmbeddedFiles("Item", [itemData]);
+      return this.actor.createEmbeddedDocuments("Item", [itemData]);
     });
 
     //Toggle Equipment

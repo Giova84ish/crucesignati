@@ -267,7 +267,7 @@ export class CrucesignatiActorSheetMonster extends CrucesignatiActorSheet {
     // Delete Inventory Item
     html.find(".item-delete").click(async (ev) => {
       const li = $(ev.currentTarget).parents(".item");
-      await this.actor.deleteEmbeddedFiles("Item", [li.data("itemId")]);
+      await this.actor.deleteEmbeddedDocuments("Item", [li.data("itemId")]);
       li.slideUp(200, () => this.render(false));
     });
 
@@ -292,12 +292,12 @@ export class CrucesignatiActorSheetMonster extends CrucesignatiActorSheet {
         const choices = header.dataset.choices.split(",");
         this._chooseItemType(choices).then((dialogInput) => {
           const itemData = createItem(dialogInput.type, dialogInput.name);
-          this.actor.createEmbeddedFiles("Item", [itemData], {});
+          this.actor.createEmbeddedDocuments("Item", [itemData], {});
         });
         return;
       }
       const itemData = createItem(type);
-      return this.actor.createEmbeddedFiles("Item", [itemData], {});
+      return this.actor.createEmbeddedDocuments("Item", [itemData], {});
     });
 
     html.find(".item-reset[data-action='reset-attacks']").click((ev) => {

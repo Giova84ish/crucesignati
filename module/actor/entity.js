@@ -46,13 +46,13 @@ export class CrucesignatiActor extends Actor {
     super.update(data, options);
   }
 
-  async createEmbeddedFiles(embeddedName, data = [], context = {}) {
+  async createEmbeddedDocuments(embeddedName, data = [], context = {}) {
     data.map((item) => {
       if (item.img === undefined) {
         item.img = CrucesignatiItem.defaultIcons[item.type];
       }
     });
-    return super.createEmbeddedFiles(embeddedName, data, context);
+    return super.createEmbeddedDocuments(embeddedName, data, context);
   }
 
   /* -------------------------------------------- */

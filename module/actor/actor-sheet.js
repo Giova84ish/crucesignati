@@ -176,13 +176,13 @@ export class CrucesignatiActorSheet extends ActorSheet {
     const target = siblings.find(s => s.data._id === targetId);
     
     if (target?.data.type == "container") {
-      this.actor.updateEmbeddedFiles("Item", [
+      this.actor.updateEmbeddedDocuments("Item", [
         { _id: source.id, "data.containerId": target.id }
       ]);
       return;
     }
     if (itemData.data.containerId != "") {
-      this.actor.updateEmbeddedFiles("Item", [
+      this.actor.updateEmbeddedDocuments("Item", [
         { _id: source.id, "data.containerId": "" }
       ]);
     }

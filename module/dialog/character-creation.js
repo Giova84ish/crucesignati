@@ -199,7 +199,7 @@ export class CrucesignatiCharacterCreator extends FormApplication {
         },
       },
     };
-    this.object.createEmbeddedFiles("Item", [itemData]);
+    this.object.createEmbeddedDocuments("Item", [itemData]);
   }
   /**
    * This method is called upon form submission after form data is validated
