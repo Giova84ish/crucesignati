@@ -1,7 +1,7 @@
-import { OseDice } from "../dice.js";
-import { OseItem } from "../item/entity.js";
+import { CrucesignatiDice } from "../dice.js";
+import { CrucesignatiItem } from "../item/entity.js";
 
-export class OseActor extends Actor {
+export class CrucesignatiActor extends Actor {
   /**
    * Extends data from base Actor class
    */
@@ -49,7 +49,7 @@ export class OseActor extends Actor {
   async createEmbeddedDocuments(embeddedName, data = [], context = {}) {
     data.map((item) => {
       if (item.img === undefined) {
-        item.img = OseItem.defaultIcons[item.type];
+        item.img = CrucesignatiItem.defaultIcons[item.type];
       }
     });
     return super.createEmbeddedDocuments(embeddedName, data, context);
@@ -168,7 +168,7 @@ export class OseActor extends Actor {
     let skip = options?.event?.ctrlKey || options.fastForward;
 
     const rollMethod =
-      this.data.type == "character" ? OseDice.RollSave : OseDice.Roll;
+      this.data.type == "character" ? CrucesignatiDice.RollSave : CrucesignatiDice.Roll;
 
     // Roll and return
     return rollMethod({
@@ -195,7 +195,7 @@ export class OseActor extends Actor {
     };
 
     // Roll and return
-    return OseDice.Roll({
+    return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
       data: data,
@@ -219,7 +219,7 @@ export class OseActor extends Actor {
     };
 
     // Roll and return
-    return OseDice.Roll({
+    return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
       data: data,
@@ -260,7 +260,7 @@ export class OseActor extends Actor {
     let skip = options.event && options.event.ctrlKey;
 
     // Roll and return
-    return OseDice.Roll({
+    return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
       data: data,
@@ -290,7 +290,7 @@ export class OseActor extends Actor {
     let skip = options?.event?.ctrlKey || options.fastForward;
 
     // Roll and return
-    return OseDice.Roll({
+    return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
       data: data,
@@ -317,7 +317,7 @@ export class OseActor extends Actor {
     };
 
     // Roll and return
-    return OseDice.Roll({
+    return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
       data: data,
@@ -348,7 +348,7 @@ export class OseActor extends Actor {
     };
 
     // Roll and return
-    return OseDice.Roll({
+    return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
       data: data,
@@ -378,7 +378,7 @@ export class OseActor extends Actor {
     let skip = options.event && options.event.ctrlKey;
 
     // Roll and return
-    return OseDice.Roll({
+    return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
       data: data,
@@ -402,7 +402,7 @@ export class OseActor extends Actor {
 
     let dmgParts = [];
     if (!attData.roll.dmg) {
-      dmgParts.push("1d6");
+      dmgParts.push("1d3");
     } else {
       dmgParts.push(attData.roll.dmg);
     }
@@ -411,7 +411,7 @@ export class OseActor extends Actor {
 
 
     // Damage roll
-    OseDice.Roll({
+    CrucesignatiDice.Roll({
       event: options.event,
       parts: dmgParts,
       data: rollData,
@@ -444,7 +444,7 @@ export class OseActor extends Actor {
       name: this.data.name,
     });
     if (!attData.item) {
-      dmgParts.push("1d6");
+      dmgParts.push("1d3");
     } else {
       label = game.i18n.format("CRUCESIGNATI.roll.attacksWith", {
         name: attData.item.name,
@@ -488,7 +488,7 @@ export class OseActor extends Actor {
     };
 
     // Roll and return
-    return OseDice.Roll({
+    return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
       data: rollData,
@@ -625,7 +625,7 @@ let AcShield = 0;
 let AacShield = 0;
 
 data.aac.naked = baseAac + data.scores.dex.mod;
-data.ac.naked = baseAc - data.scores.dex.mod;
+data.ac.naked = baseAc + data.scores.dex.mod2;
 const armors = this.data.items.filter((i) => i.type == "armor");
 armors.forEach((a) => {
   const armorData = a.data.data;
@@ -639,7 +639,7 @@ armors.forEach((a) => {
   baseAac = armorData.aac.value;
 });
 data.aac.value = baseAac + data.scores.dex.mod + AacShield + data.aac.mod;
-data.ac.value = baseAc - data.scores.dex.mod - AcShield - data.ac.mod;
+data.ac.value = baseAc + data.scores.dex.mod2 - AcShield - data.ac.mod;
 data.ac.shield = AcShield;
 data.aac.shield = AacShield;
 }
@@ -663,7 +663,7 @@ data.aac.shield = AacShield;
     };
 //Modifica al colpire in mischia
 if (data.details.straordinaryStrenght == 0) {
-  data.scores.str.mod = OseActor._valueFromTable(
+  data.scores.str.mod = CrucesignatiActor._valueFromTable(
     {
       1: -5,
       2: -3,
@@ -677,7 +677,7 @@ if (data.details.straordinaryStrenght == 0) {
     data.scores.str.value
   );
 }  else {
-  data.scores.str.mod = OseActor._valueFromTable(
+  data.scores.str.mod = CrucesignatiActor._valueFromTable(
     {
       1: 1,
       51: 2,
@@ -688,7 +688,7 @@ if (data.details.straordinaryStrenght == 0) {
 };
 //Modifica ai danni in mischia
 if (data.details.straordinaryStrenght == 0) {
-  data.scores.str.mod2 = OseActor._valueFromTable(
+  data.scores.str.mod2 = CrucesignatiActor._valueFromTable(
     {
       1: -2,
       2: -2,
@@ -700,7 +700,7 @@ if (data.details.straordinaryStrenght == 0) {
     data.scores.str.value
   );
 }  else {
-  data.scores.str.mod2 = OseActor._valueFromTable(
+  data.scores.str.mod2 = CrucesignatiActor._valueFromTable(
     {
       1: 3,
       76: 4,
@@ -714,7 +714,7 @@ if (data.details.straordinaryStrenght == 0) {
 
 //Massima capacità di carico (ingombro), in base alla For
 if (data.details.straordinaryStrenght == 0) {
-  data.scores.str.mod3 = OseActor._valueFromTable(
+  data.scores.str.mod3 = CrucesignatiActor._valueFromTable(
     {
       1: 1,
       3: 2.5,
@@ -730,7 +730,7 @@ if (data.details.straordinaryStrenght == 0) {
     data.scores.str.value
   );
 }  else {
-  data.scores.str.mod3 = OseActor._valueFromTable(
+  data.scores.str.mod3 = CrucesignatiActor._valueFromTable(
     {
       1: 60,
       51: 70,
@@ -742,7 +742,7 @@ if (data.details.straordinaryStrenght == 0) {
   );
 };
 //Massimo livello di incantesimi
-    data.scores.int.mod = OseActor._valueFromTable(
+    data.scores.int.mod = CrucesignatiActor._valueFromTable(
       {
         9: 4,
         10: 5,
@@ -754,7 +754,7 @@ if (data.details.straordinaryStrenght == 0) {
       data.scores.int.value
     );
 //percentuale di apprendimento incantesimi
-    data.scores.int.mod2 = OseActor._valueFromTable(
+    data.scores.int.mod2 = CrucesignatiActor._valueFromTable(
       {
         9: 35,
         10: 40,
@@ -770,7 +770,7 @@ if (data.details.straordinaryStrenght == 0) {
       data.scores.int.value
     );
 //Massimo numero di incantesimi per livello
-data.scores.int.mod3 = OseActor._valueFromTable(
+data.scores.int.mod3 = CrucesignatiActor._valueFromTable(
   {
     9: 6,
     10: 7,
@@ -782,7 +782,7 @@ data.scores.int.mod3 = OseActor._valueFromTable(
   data.scores.int.value
 );
 //Modificatore al colpire a distanza
-    data.scores.dex.mod = OseActor._valueFromTable(
+    data.scores.dex.mod = CrucesignatiActor._valueFromTable(
       {
         1: -6,
         2: -4,
@@ -797,7 +797,7 @@ data.scores.int.mod3 = OseActor._valueFromTable(
       data.scores.dex.value
     );
 //Modificatore alla CA
-data.scores.dex.mod2 = OseActor._valueFromTable(
+data.scores.dex.mod2 = CrucesignatiActor._valueFromTable(
   {
     1: 5,
     3: 4,
@@ -813,7 +813,7 @@ data.scores.dex.mod2 = OseActor._valueFromTable(
   data.scores.dex.value
 );
 //Moifica al morale e ai tiri reazione
-    data.scores.cha.mod = OseActor._valueFromTable(
+    data.scores.cha.mod = CrucesignatiActor._valueFromTable(
       {
         1: -5,
         5: -4,
@@ -826,7 +826,7 @@ data.scores.dex.mod2 = OseActor._valueFromTable(
       data.scores.cha.value
     );
 //Massimo numero di seguaci    
-    data.scores.cha.mod2 = OseActor._valueFromTable(
+    data.scores.cha.mod2 = CrucesignatiActor._valueFromTable(
       {
         1: 1,
         5: 2,
@@ -839,7 +839,7 @@ data.scores.dex.mod2 = OseActor._valueFromTable(
       data.scores.cha.value
     );
 //Modificatori ai TS contro magia
-    data.scores.wis.mod = OseActor._valueFromTable(
+    data.scores.wis.mod = CrucesignatiActor._valueFromTable(
       {
         1: -6,
         2: -4,
@@ -856,14 +856,14 @@ data.scores.dex.mod2 = OseActor._valueFromTable(
     );
 
 // 5% Bonus ai PX per la Saggezza
-data.scores.wis.mod3 = OseActor._valueFromTable(
+data.scores.wis.mod3 = CrucesignatiActor._valueFromTable(
   {
     13: 5
   },
   data.scores.wis.value
 );
 //Percentuale di fallimento incantesimi divini
-data.scores.wis.mod2 = OseActor._valueFromTable(
+data.scores.wis.mod2 = CrucesignatiActor._valueFromTable(
   {
     1: 80,
     2: 70,
@@ -882,7 +882,7 @@ data.scores.wis.mod2 = OseActor._valueFromTable(
 );
 //Modifica ai PF
 if (data.details.class === "guerriero") {
-	data.scores.con.mod = OseActor._valueFromTable(
+	data.scores.con.mod = CrucesignatiActor._valueFromTable(
       {
         1: -3,
         2: -2,
@@ -896,7 +896,7 @@ if (data.details.class === "guerriero") {
       data.scores.con.value
     );
 	} else {
-	data.scores.con.mod = OseActor._valueFromTable(
+	data.scores.con.mod = CrucesignatiActor._valueFromTable(
       {
         1: -3,
         2: -2,
@@ -909,7 +909,7 @@ if (data.details.class === "guerriero") {
     );
 };
 //Bonus ai TS contro veleni
-data.scores.con.mod2 = OseActor._valueFromTable(
+data.scores.con.mod2 = CrucesignatiActor._valueFromTable(
   {
     1: -2,
     2: -1,
@@ -928,7 +928,7 @@ data.scores.con.mod2 = OseActor._valueFromTable(
       18: 2,
     };
 //Modifiche all'iniziativa in base alla Destrezza
-    data.scores.dex.init = OseActor._valueFromTable(
+    data.scores.dex.init = CrucesignatiActor._valueFromTable(
       {
         1: 5,
         3: 4,
@@ -943,7 +943,7 @@ data.scores.con.mod2 = OseActor._valueFromTable(
       },
       data.scores.dex.value
     );
-    data.scores.cha.npc = OseActor._valueFromTable(
+    data.scores.cha.npc = CrucesignatiActor._valueFromTable(
       capped,
       data.scores.cha.value
     );
@@ -959,7 +959,7 @@ data.scores.con.mod2 = OseActor._valueFromTable(
       18: 5
     };
     //Tiro per sfondare porte
-    data.exploration.odMod = OseActor._valueFromTable(
+    data.exploration.odMod = CrucesignatiActor._valueFromTable(
       od,
       data.scores.str.value
     );
@@ -970,7 +970,7 @@ data.scores.con.mod2 = OseActor._valueFromTable(
       6: "CRUCESIGNATI.LiteracyBasic",
       9: "CRUCESIGNATI.Literate",
     };
-    data.languages.literacy = OseActor._valueFromTable(
+    data.languages.literacy = CrucesignatiActor._valueFromTable(
       literacy,
       data.scores.int.value
     );
@@ -982,7 +982,7 @@ data.scores.con.mod2 = OseActor._valueFromTable(
       16: "CRUCESIGNATI.NativePlus2",
       18: "CRUCESIGNATI.NativePlus3",
     };
-    data.languages.spoken = OseActor._valueFromTable(
+    data.languages.spoken = CrucesignatiActor._valueFromTable(
       spoken,
       data.scores.int.value
     );

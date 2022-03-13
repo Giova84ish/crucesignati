@@ -1,6 +1,6 @@
-import { OsePartyXP } from "./party-xp.js";
+import { CrucesignatiPartyXP } from "./party-xp.js";
 
-export class OsePartySheet extends FormApplication {
+export class CrucesignatiPartySheet extends FormApplication {
   
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
@@ -55,11 +55,11 @@ export class OsePartySheet extends FormApplication {
   /* -------------------------------------------- */
 
   async _dealXP(ev) {
-    new OsePartyXP(this.object, {}).render(true);
+    new CrucesignatiPartyXP(this.object, {}).render(true);
   }
 
   async _selectActors(ev) {
-    const entities = this.object.entities.sort((a, b) => b.data.token.disposition - a.data.token.disposition);
+    const entities = this.object.documents.sort((a, b) => b.data.token.disposition - a.data.token.disposition);
     const template = "/systems/crucesignati/templates/apps/party-select.html";
     const templateData = {
       actors: entities
@@ -76,7 +76,7 @@ export class OsePartySheet extends FormApplication {
             let checks = html.find("input[data-action='select-actor']");
             await Promise.all(checks.map(async (_, c) => {
               let key = c.getAttribute('name');
-              await this.object.entities[key].setFlag('crucesignati', 'party', c.checked);
+              await this.object.documents[key].setFlag('crucesignati', 'party', c.checked);
             }));
             this.render(true);
           },

@@ -1,12 +1,12 @@
-import { OseActor } from "./entity.js";
-import { OseActorSheet } from "./actor-sheet.js";
-import { OseCharacterModifiers } from "../dialog/character-modifiers.js";
-import { OseCharacterCreator } from "../dialog/character-creation.js";
+import { CrucesignatiActor } from "./entity.js";
+import { CrucesignatiActorSheet } from "./actor-sheet.js";
+import { CrucesignatiCharacterModifiers } from "../dialog/character-modifiers.js";
+import { CrucesignatiCharacterCreator } from "../dialog/character-creation.js";
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  */
-export class OseActorSheetCharacter extends OseActorSheet {
+export class CrucesignatiActorSheetCharacter extends CrucesignatiActorSheet {
   constructor(...args) {
     super(...args);
   }
@@ -101,7 +101,7 @@ export class OseActorSheetCharacter extends OseActorSheet {
   }
 
   generateScores() {
-    new OseCharacterCreator(this.actor, {
+    new CrucesignatiCharacterCreator(this.actor, {
       top: this.position.top + 40,
       left: this.position.left + (this.position.width - 400) / 2,
     }).render(true);
@@ -119,7 +119,7 @@ export class OseActorSheetCharacter extends OseActorSheet {
   }
 
 
-  async _chocrucesignatiLang() {
+  async _chooseLang() {
     let choices = CONFIG.CRUCESIGNATI.languages;
 
     let templateData = { choices: choices },
@@ -155,7 +155,7 @@ export class OseActorSheetCharacter extends OseActorSheet {
   _pushLang(table) {
     const data = this.actor.data.data;
     let update = duplicate(data[table]);
-    this._chocrucesignatiLang().then((dialogInput) => {
+    this._chooseLang().then((dialogInput) => {
       const name = CONFIG.CRUCESIGNATI.languages[dialogInput.choice];
       if (update.value) {
         update.value.push(name);
@@ -187,7 +187,7 @@ export class OseActorSheetCharacter extends OseActorSheet {
 
   _onShowModifiers(event) {
     event.preventDefault();
-    new OseCharacterModifiers(this.actor, {
+    new CrucesignatiCharacterModifiers(this.actor, {
       top: this.position.top + 40,
       left: this.position.left + (this.position.width - 400) / 2,
     }).render(true);

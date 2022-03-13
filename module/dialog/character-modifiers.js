@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
-import { OseActor } from '../actor/entity.js';
+import { CrucesignatiActor } from '../actor/entity.js';
 
-export class OseCharacterModifiers extends FormApplication {
+export class CrucesignatiCharacterModifiers extends FormApplication {
   static get defaultOptions() {
     const options = super.defaultOptions;
     options.classes = ["crucesignati", "dialog", "modifiers"],

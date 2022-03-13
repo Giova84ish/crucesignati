@@ -19,7 +19,7 @@ export const registerSettings = function () {
     default: "reset",
     scope: "world",
     type: String,
-    config: true,
+    config: false,
     choices: {
       keep: "CRUCESIGNATI.Setting.InitiativeKeep",
       reset: "CRUCESIGNATI.Setting.InitiativeReset",
@@ -40,10 +40,10 @@ export const registerSettings = function () {
   game.settings.register("crucesignati", "morale", {
     name: game.i18n.localize("CRUCESIGNATI.Setting.Morale"),
     hint: game.i18n.localize("CRUCESIGNATI.Setting.MoraleHint"),
-    default: false,
+    default: true,
     scope: "world",
     type: Boolean,
-    config: true,
+    config: false,
   });
 
   game.settings.register("crucesignati", "encumbranceOption", {
@@ -68,7 +68,7 @@ export const registerSettings = function () {
     default: 800,
     scope: "world",
     type: Number,
-    config: true,
+    config: false,
     onChange: _ => window.location.reload()
   });
 
@@ -78,7 +78,7 @@ export const registerSettings = function () {
     default: "",
     scope: "world",
     type: String,
-    config: true,
+    config: false,
     onChange: _ => window.location.reload()
   });
 };

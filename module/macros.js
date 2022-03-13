@@ -10,7 +10,7 @@
  * @param {number} slot     The hotbar slot to use
  * @returns {Promise}
  */
-export async function createOseMacro(data, slot) {
+export async function createCrucesignatiMacro(data, slot) {
     if ( data.type !== "Item" ) return;
     if (!( "data" in data ) ) return ui.notifications.warn("You can only create macro buttons for owned Items");
     const item = data.data;
@@ -48,7 +48,7 @@ export async function createOseMacro(data, slot) {
     // Get matching items
     const items = actor ? actor.items.filter(i => i.name === itemName) : [];
     if ( items.length > 1 ) {
-      ui.notifications.warn(`Your controlled Actor ${actor.name} has more than one Item with name ${itemName}. The first matched item will be chcrucesignatin.`);
+      ui.notifications.warn(`Your controlled Actor ${actor.name} has more than one Item with name ${itemName}. The first matched item will be choosen.`);
     } else if ( items.length === 0 ) {
       return ui.notifications.warn(`Your controlled Actor does not have an item named ${itemName}`);
     }

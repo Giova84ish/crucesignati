@@ -1,7 +1,7 @@
 /**
  * Extend the basic ItemSheet with some very simple modifications
  */
-export class OseItemSheet extends ItemSheet {
+export class CrucesignatiItemSheet extends ItemSheet {
   constructor(...args) {
     super(...args);
 

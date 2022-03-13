@@ -1,9 +1,9 @@
-import { OseDice } from "../dice.js";
+import { CrucesignatiDice } from "../dice.js";
 
 /**
  * Override and extend the basic :class:`Item` implementation
  */
-export class OseItem extends Item {
+export class CrucesignatiItem extends Item {
   // Replacing default image */
   static get defaultIcons() {
     return {
@@ -73,19 +73,19 @@ export class OseItem extends Item {
     if (data.missile && data.melee && !isNPC) {
       // Dialog
       new Dialog({
-        title: "Chocrucesignati Attack Range",
+        title: "Scegli il tipo di attacco",
         content: "",
         buttons: {
           melee: {
             icon: '<i class="fas fa-fist-raised"></i>',
-            label: "Melee",
+            label: "Mischia",
             callback: () => {
               this.actor.targetAttack(rollData, "melee", options);
             },
           },
           missile: {
             icon: '<i class="fas fa-bullseye"></i>',
-            label: "Missile",
+            label: "Distanza",
             callback: () => {
               this.actor.targetAttack(rollData, "missile", options);
             },
@@ -104,7 +104,7 @@ export class OseItem extends Item {
   async rollFormula(options = {}) {
     const data = this.data.data;
     if (!data.roll) {
-      throw new Error("This Item does not have a formula to roll!");
+      throw new Error("Questo oggetto non ha una formula per tirare!");
     }
 
     const label = `${this.name}`;
@@ -123,7 +123,7 @@ export class OseItem extends Item {
     };
 
     // Roll and return
-    return OseDice.Roll({
+    return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
       data: newData,
@@ -361,7 +361,7 @@ export class OseItem extends Item {
     const item = actor.items.get(card.dataset.itemId);
     if (!item) {
       return ui.notifications.error(
-        `The requested item ${card.dataset.itemId} no longer exists on Actor ${actor.name}`
+        `Hai richiesto un oggetto ${card.dataset.itemId} che non esiste su questo Attore ${actor.name}`
       );
     }
 
@@ -378,7 +378,7 @@ export class OseItem extends Item {
     else if (action == "save") {
       if (!targets.length) {
         ui.notifications.warn(
-          `You must have one or more controlled Tokens in order to use this option.`
+          `Devi avere uno o più Tokens selezionati per scegliere questa opzione.`
         );
         return (button.disabled = false);
       }

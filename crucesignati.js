@@ -1,10 +1,10 @@
 // Import Modules
-import { OseItemSheet } from "./module/item/item-sheet.js";
-import { OseActorSheetCharacter } from "./module/actor/character-sheet.js";
-import { OseActorSheetMonster } from "./module/actor/monster-sheet.js";
+import { CrucesignatiItemSheet } from "./module/item/item-sheet.js";
+import { CrucesignatiActorSheetCharacter } from "./module/actor/character-sheet.js";
+import { CrucesignatiActorSheetMonster } from "./module/actor/monster-sheet.js";
 import { preloadHandlebarsTemplates } from "./module/preloadTemplates.js";
-import { OseActor } from "./module/actor/entity.js";
-import { OseItem } from "./module/item/entity.js";
+import { CrucesignatiActor } from "./module/actor/entity.js";
+import { CrucesignatiItem } from "./module/item/entity.js";
 import { CRUCESIGNATI } from "./module/config.js";
 import { registerSettings } from "./module/settings.js";
 import { registerHelpers } from "./module/helpers.js";
@@ -12,7 +12,7 @@ import * as chat from "./module/chat.js";
 import * as treasure from "./module/treasure.js";
 import * as macros from "./module/macros.js";
 import * as party from "./module/party.js";
-import { OseCombat } from "./module/combat.js";
+import { CrucesignatiCombat } from "./module/combat.js";
 import * as renderList from "./module/renderList.js";
 
 /* -------------------------------------------- */
@@ -25,7 +25,7 @@ Hooks.once("init", async function () {
    * @type {String}
    */
   CONFIG.Combat.initiative = {
-    formula: "1d6 + @initiative.value + @speed",
+    formula: "1d10 + @initiative.value + @speed",
     decimals: 2,
   };
 
@@ -41,24 +41,24 @@ Hooks.once("init", async function () {
   // Register custom system settings
   registerSettings();
 
-  CONFIG.Actor.documentClass = OseActor;
-  CONFIG.Item.documentClass = OseItem;
+  CONFIG.Actor.documentClass = CrucesignatiActor;
+  CONFIG.Item.documentClass = CrucesignatiItem;
 
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("crucesignati", OseActorSheetCharacter, {
+  Actors.registerSheet("crucesignati", CrucesignatiActorSheetCharacter, {
     types: ["character"],
     makeDefault: true,
     label: "CRUCESIGNATI.SheetClassCharacter"
   });
-  Actors.registerSheet("crucesignati", OseActorSheetMonster, {
+  Actors.registerSheet("crucesignati", CrucesignatiActorSheetMonster, {
     types: ["monster"],
     makeDefault: true,
     label: "CRUCESIGNATI.SheetClassMonster"
   });
 
   Items.unregisterSheet("core", ItemSheet);
-  Items.registerSheet("crucesignati", OseItemSheet, {
+  Items.registerSheet("crucesignati", CrucesignatiItemSheet, {
     makeDefault: true,
     label: "CRUCESIGNATI.SheetClassItem"
   });
@@ -90,7 +90,7 @@ Hooks.once("setup", function () {
 
 Hooks.once("ready", async () => {
   Hooks.on("hotbarDrop", (bar, data, slot) =>
-    macros.createOseMacro(data, slot)
+    macros.createCrucesignatiMacro(data, slot)
   );
 });
 
@@ -123,16 +123,16 @@ Hooks.on("renderSidebarTab", async (object, html) => {
 Hooks.on("preCreateCombatant", (combat, data, options, id) => {
   let init = game.settings.get("crucesignati", "initiative");
   if (init == "group") {
-    OseCombat.addCombatant(combat, data, options, id);
+    CrucesignatiCombat.addCombatant(combat, data, options, id);
   }
 });
 
-Hooks.on("updateCombatant", OseCombat.updateCombatant);
-Hooks.on("renderCombatTracker", OseCombat.format);
-Hooks.on("preUpdateCombat", OseCombat.preUpdateCombat);
-Hooks.on("getCombatTrackerEntryContext", OseCombat.addContextEntry);
+Hooks.on("updateCombatant", CrucesignatiCombat.updateCombatant);
+Hooks.on("renderCombatTracker", CrucesignatiCombat.format);
+Hooks.on("preUpdateCombat", CrucesignatiCombat.preUpdateCombat);
+Hooks.on("getCombatTrackerEntryContext", CrucesignatiCombat.addContextEntry);
 
-Hooks.on("renderChatLog", (app, html, data) => OseItem.chatListeners(html));
+Hooks.on("renderChatLog", (app, html, data) => CrucesignatiItem.chatListeners(html));
 Hooks.on("getChatLogEntryContext", chat.addChatMessageContextOptions);
 Hooks.on("renderChatMessage", chat.addChatMessageButtons);
 Hooks.on("renderRollTableConfig", treasure.augmentTable);

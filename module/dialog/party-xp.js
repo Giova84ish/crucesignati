@@ -1,4 +1,4 @@
-export class OsePartyXP extends FormApplication {
+export class CrucesignatiPartyXP extends FormApplication {
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
@@ -27,7 +27,7 @@ export class OsePartyXP extends FormApplication {
      * @return {Object}
      */
     getData() {
-        const actors = this.object.entities.filter(e => e.data.type === "character" && e.data.flags.crucesignati && e.data.flags.crucesignati.party === true);
+        const actors = this.object.documents.filter(e => e.data.type === "character" && e.data.flags.crucesignati && e.data.flags.crucesignati.party === true);
         let data = {
             actors: actors,
             data: this.object,
@@ -52,7 +52,7 @@ export class OsePartyXP extends FormApplication {
     /* -------------------------------------------- */
 
     _calculateShare(ev) {
-        const actors = this.object.entities.filter(e => e.data.type === "character" && e.data.flags.crucesignati && e.data.flags.crucesignati.party === true);
+        const actors = this.object.documents.filter(e => e.data.type === "character" && e.data.flags.crucesignati && e.data.flags.crucesignati.party === true);
         const toDeal = $(ev.currentTarget.parentElement).find('input[name="total"]').val();
         const html = $(this.form);
         const value = parseFloat(toDeal) / actors.length;
@@ -68,7 +68,7 @@ export class OsePartyXP extends FormApplication {
             const qRow = $(row);
             const value = qRow.find('input').val();
             const id = qRow.data('actorId');
-            const actor = this.object.entities.find(e => e.id === id);
+            const actor = this.object.documents.find(e => e.id === id);
             if (value) {
                 actor.getExperience(Math.floor(parseInt(value)));
             }

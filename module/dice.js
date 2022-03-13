@@ -1,4 +1,4 @@
-export class OseDice {
+export class CrucesignatiDice {
 
   static async sendRoll({
     parts = [],
@@ -48,7 +48,7 @@ export class OseDice {
       data.roll.blindroll = true;
     }
 
-    templateData.result = OseDice.digestResult(data, roll);
+    templateData.result = CrucesignatiDice.digestResult(data, roll);
 
     return new Promise((resolve) => {
       roll.render().then((r) => {
@@ -231,7 +231,7 @@ export class OseDice {
       data.roll.blindroll = true;
     }
 
-    templateData.result = OseDice.digestAttackResult(data, roll);
+    templateData.result = CrucesignatiDice.digestAttackResult(data, roll);
 
     return new Promise((resolve) => {
       roll.render().then((r) => {
@@ -307,7 +307,7 @@ export class OseDice {
       speaker: speaker,
 	  chatMessage: chatMessage
     };
-    if (skipDialog) { return OseDice.sendRoll(rollData); }
+    if (skipDialog) { return CrucesignatiDice.sendRoll(rollData); }
 
     let buttons = {
       ok: {
@@ -316,7 +316,7 @@ export class OseDice {
         callback: (html) => {
           rolled = true;
           rollData.form = html[0].querySelector("form");
-          roll = OseDice.sendRoll(rollData);
+          roll = CrucesignatiDice.sendRoll(rollData);
         },
       },
       magic: {
@@ -327,7 +327,7 @@ export class OseDice {
           rollData.form = html[0].querySelector("form");
           rollData.parts.push(`${rollData.data.roll.magic}`);
           rollData.title += ` ${game.i18n.localize("CRUCESIGNATI.saves.magic.short")} (${rollData.data.roll.magic})`;
-          roll = OseDice.sendRoll(rollData);
+          roll = CrucesignatiDice.sendRoll(rollData);
         },
       },
       cancel: {
@@ -382,8 +382,8 @@ export class OseDice {
     };
     if (skipDialog) {
       return ["melee", "missile", "attack"].includes(data.roll.type)
-        ? OseDice.sendAttackRoll(rollData)
-        : OseDice.sendRoll(rollData);
+        ? CrucesignatiDice.sendAttackRoll(rollData)
+        : CrucesignatiDice.sendRoll(rollData);
     }
 
     let buttons = {
@@ -394,8 +394,8 @@ export class OseDice {
           rolled = true;
           rollData.form = html[0].querySelector("form");
           roll = ["melee", "missile", "attack"].includes(data.roll.type)
-            ? OseDice.sendAttackRoll(rollData)
-            : OseDice.sendRoll(rollData);
+            ? CrucesignatiDice.sendAttackRoll(rollData)
+            : CrucesignatiDice.sendRoll(rollData);
         },
       },
       cancel: {

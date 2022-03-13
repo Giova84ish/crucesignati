@@ -1,7 +1,7 @@
-import { OseActor } from "./entity.js";
-import { OseEntityTweaks } from "../dialog/entity-tweaks.js";
+import { CrucesignatiActor } from "./entity.js";
+import { CrucesignatiEntityTweaks } from "../dialog/entity-tweaks.js";
 
-export class OseActorSheet extends ActorSheet {
+export class CrucesignatiActorSheet extends ActorSheet {
   constructor(...args) {
     super(...args);
   }
@@ -234,7 +234,7 @@ export class OseActorSheet extends ActorSheet {
 
   _onConfigureActor(event) {
     event.preventDefault();
-    new OseEntityTweaks(this.actor, {
+    new CrucesignatiEntityTweaks(this.actor, {
       top: this.position.top + 40,
       left: this.position.left + (this.position.width - 400) / 2,
     }).render(true);
