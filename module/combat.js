@@ -80,7 +80,7 @@ export class CrucesignatiCombat {
       messages.push(chatData);
     });
 
-    await combat.updateEmbeddedDocuments("Combatant", updates);
+    await combat.updateEmbeddedFiles("Combatant", updates);
 
     await ChatMessage.implementation.create(messages);
     data.turn = 0;

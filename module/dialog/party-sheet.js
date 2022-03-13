@@ -59,7 +59,7 @@ export class CrucesignatiPartySheet extends FormApplication {
   }
 
   async _selectActors(ev) {
-    const entities = this.object.documents.sort((a, b) => b.data.token.disposition - a.data.token.disposition);
+    const entities = this.object.Files.sort((a, b) => b.data.token.disposition - a.data.token.disposition);
     const template = "/systems/crucesignati/templates/apps/party-select.html";
     const templateData = {
       actors: entities
@@ -76,7 +76,7 @@ export class CrucesignatiPartySheet extends FormApplication {
             let checks = html.find("input[data-action='select-actor']");
             await Promise.all(checks.map(async (_, c) => {
               let key = c.getAttribute('name');
-              await this.object.documents[key].setFlag('crucesignati', 'party', c.checked);
+              await this.object.Files[key].setFlag('crucesignati', 'party', c.checked);
             }));
             this.render(true);
           },
