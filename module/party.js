@@ -9,6 +9,10 @@ export const addControl = (object, html) => {
 }
 
 export const showPartySheet = (object) => {
+<<<<<<< HEAD
+=======
+    event.preventDefault();
+>>>>>>> 16f6c7b00312fe3b691333a12ab771625e7f5fb1
     new CrucesignatiPartySheet(object, {
       top: window.screen.height / 2 - 180,
       left:window.screen.width / 2 - 140,

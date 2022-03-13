@@ -73,7 +73,11 @@ export class CrucesignatiItem extends Item {
     if (data.missile && data.melee && !isNPC) {
       // Dialog
       new Dialog({
+<<<<<<< HEAD
         title: "Scegli il tipo di attacco",
+=======
+        title: "Choose Attack Range",
+>>>>>>> 16f6c7b00312fe3b691333a12ab771625e7f5fb1
         content: "",
         buttons: {
           melee: {
