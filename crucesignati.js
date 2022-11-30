@@ -23,9 +23,10 @@ Hooks.once("init", async function () {
   /**
    * Set an initiative formula for the system
    * @type {String}
+   * Ho modificato qui aggiungendo -() per ottenere l'effetto di iniziativa inversa
    */
   CONFIG.Combat.initiative = {
-    formula: "1d10 + @initiative.value + @speed",
+    formula: "-(1d10 + @initiative.value + @speed)",
     decimals: 2,
   };
 

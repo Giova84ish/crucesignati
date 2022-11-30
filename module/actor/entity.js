@@ -581,18 +581,34 @@ export class CrucesignatiActor extends Actor {
   _calculateMovement() {
     const data = this.data.data;
     let weight = data.encumbrance.value;
-    if (weight > data.scores.str.mod3) {
-        if (data.details.race == "hobbit" || data.details.race == "nano") {
-          data.movement.base = 4.5;    
-        } else {
-          data.movement.base = 6;
-        }    
-      } else {
-        if (data.details.race == "hobbit" || data.details.race == "nano"){
-          data.movement.base = 9;
-        } else{
-          data.movement.base = 12;
-        }        
+    let leggero = data.scores.str.mod4;
+    let medio = data.scores.str.mod5;
+    let pesante = data.scores.str.mod6;
+    let severo = data.scores.str.mod3;
+    if (data.details.race == "halfling" || data.details.race == "nano") {
+      if (weight < leggero) {
+        data.movement.base = 9
+      } else if (weight > leggero && weight < medio) {
+        data.movement.base = 8
+      } else if (weight > medio && weight < pesante) {
+        data.movement.base = 6
+      } else if (weight > pesante && weight < severo) {
+        data.movement.base = 4
+      } else if (weight >= severo) {
+        data.movement.base = 2
+      }
+      } else { 
+        if (weight < leggero) {
+          data.movement.base = 12
+        } else if (weight > leggero && weight < medio) {
+          data.movement.base = 11
+        } else if (weight > medio && weight < pesante) {
+          data.movement.base = 8
+        } else if (weight > pesante && weight < severo) {
+          data.movement.base = 5
+        } else if (weight >= severo) {
+          data.movement.base = 2
+        }
       } 
   }
 
@@ -711,32 +727,117 @@ if (data.details.straordinaryStrenght == 0) {
   );
 };
 
+//Ingombro leggero in base alla For
+if (data.details.straordinaryStrenght == 0) {
+  data.scores.str.mod4 = CrucesignatiActor._valueFromTable(
+    {
+      1: 5,
+      6: 10,
+      8: 18,
+      10: 20,
+      12: 23,
+      14: 29,
+      16: 36,
+      17: 43,
+      18: 55
+    },
+    data.scores.str.value
+  );
+}  else {
+  data.scores.str.mod4 = CrucesignatiActor._valueFromTable(
+    {
+      1: 67,
+      51: 78,
+      76: 89,
+      91: 112,
+      100: 157
+    },
+    data.details.straordinaryStrenght
+  );
+};
+
+//Ingombro medio in base alla For
+if (data.details.straordinaryStrenght == 0) {
+  data.scores.str.mod5 = CrucesignatiActor._valueFromTable(
+    {
+      1: 6,
+      6: 15,
+      8: 24,
+      10: 29,
+      12: 34,
+      14: 43,
+      16: 49,
+      17: 60,
+      18: 73
+    },
+    data.scores.str.value
+  );
+}  else {
+  data.scores.str.mod5 = CrucesignatiActor._valueFromTable(
+    {
+      1: 84,
+      51: 96,
+      76: 107,
+      91: 130,
+      100: 157
+    },
+    data.details.straordinaryStrenght
+  );
+};
+
+//Ingombro pesante in base alla For
+if (data.details.straordinaryStrenght == 0) {
+  data.scores.str.mod6 = CrucesignatiActor._valueFromTable(
+    {
+      1: 8,
+      6: 19,
+      8: 27,
+      10: 37,
+      12: 46,
+      14: 57,
+      16: 63,
+      17: 77,
+      18: 91
+    },
+    data.scores.str.value
+  );
+}  else {
+  data.scores.str.mod6 = CrucesignatiActor._valueFromTable(
+    {
+      1: 102,
+      51: 114,
+      76: 125,
+      91: 148,
+      100: 193
+    },
+    data.details.straordinaryStrenght
+  );
+};
 
 //Massima capacità di carico (ingombro), in base alla For
 if (data.details.straordinaryStrenght == 0) {
   data.scores.str.mod3 = CrucesignatiActor._valueFromTable(
     {
-      1: 1,
-      3: 2.5,
-      4: 5,
-      6: 9,
-      8: 18,
-      11: 20,
-      13: 25,
-      16: 30,
-      17: 40,
-      18: 50
+      1: 9,
+      6: 23,
+      8: 38,
+      10: 45,
+      12: 57,
+      14: 70,
+      16: 77,
+      17: 95,
+      18: 111
     },
     data.scores.str.value
   );
 }  else {
   data.scores.str.mod3 = CrucesignatiActor._valueFromTable(
     {
-      1: 60,
-      51: 70,
-      76: 80,
-      91: 100,
-      100: 150
+      1: 122,
+      51: 133,
+      76: 145,
+      91: 165,
+      100: 213
     },
     data.details.straordinaryStrenght
   );

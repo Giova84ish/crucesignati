@@ -31,7 +31,7 @@
   "CRUCESIGNATI.RollMode": "Modalità di Tiro",
   "CRUCESIGNATI.RollExample": "es. +1d4",
   
-  "CRUCESIGNATI.class.type": "Classe",
+  "CRUCESIGNATI.class.type": "Professione",
   "CRUCESIGNATI.class.warrior": "Guerriero",
   "CRUCESIGNATI.class.cleric": "Chierico",
   "CRUCESIGNATI.class.druid": "Druido",
@@ -59,7 +59,7 @@
   "CRUCESIGNATI.table.treasure.roll": "Tiro per i Tesori",
 
   "CRUCESIGNATI.details.name": "Nome",
-  "CRUCESIGNATI.details.class": "Classe",
+  "CRUCESIGNATI.details.class": "Professione",
   "CRUCESIGNATI.details.title": "Titolo",
   "CRUCESIGNATI.details.race": "Razza",
   "CRUCESIGNATI.details.alignment": "Allineamento",
@@ -78,7 +78,10 @@
 
   "CRUCESIGNATI.Attack": "Attacco",
   "CRUCESIGNATI.Encumbrance": "Ingombro",
-  "CRUCESIGNATI.encumbranceMax": "Ingombro massimo",
+  "CRUCESIGNATI.encumbranceLight": "Ingombro leggero",
+  "CRUCESIGNATI.encumbranceMedium": "Ingombro medio (-1 colpire)",
+  "CRUCESIGNATI.encumbranceHeavy": "Ingombro pesante (-2 colpire, +1 CA)",
+  "CRUCESIGNATI.encumbranceMax": "Ingombro massimo (-4 colpire, +4 CA)",
   "CRUCESIGNATI.Retainer": "Seguace",
   "CRUCESIGNATI.RetainerWage": "Ingaggio",
   "CRUCESIGNATI.RetainerUpkeep": "Mantenimento",

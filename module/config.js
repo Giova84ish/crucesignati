@@ -51,35 +51,6 @@ export const CRUCESIGNATI = {
     white: "CRUCESIGNATI.colors.white"
   },
   languages: [
-    "Algandarve",
-    "Angate",
-    "Beaulangue",
-    "Cabbandari",
-    "Classico (scritto)",
-    "Dakkandi",
-    "Elleslandic",
-    "Elfico (orale)",
-    "Elfico (scritto)",
-    "Emphidoriano (orale)",
-    "Empidoriano (scritto)",
-    "Etya'b'yely",
-    "Geroglifici Qemor",
-    "Jezant (scritto)",
-    "Majestic (scritto)",
-    "Mercaniano moderno",
-    "Nascerine",
-    "Nanico",
-    "Ophalariano",
-    "Klav",
-    "Kell (scritto)",
-    "Kurlish",
-    "Lugwyd (druidico)",
-    "Pittogrammi Khitai",
-    "Raukil",
-    "Runico (scritto)",
-    "Rune Nikkar (scritto)",
-    "Unno",
-    "Visic"
   ],
   tags: {
     melee: "CRUCESIGNATI.items.Melee",
@@ -106,76 +77,84 @@ export const CRUCESIGNATI = {
   monster_saves: {
     0: {
       g: 0,
-      d: 14,
-      w: 15,
-      p: 16,
-      b: 17,
-      s: 18
+      d: 16,
+      w: 18,
+      p: 17,
+      b: 20,
+      s: 19
     },
     1: {
       g: 0,
-      d: 12,
-      w: 13,
+      d: 14,
+      w: 16,
+      p: 15,
+      b: 17,
+      s: 17
+    },
+    3: {
+      g: 0,
+      d: 13,
+      w: 15,
       p: 14,
-      b: 15,
+      b: 16,
       s: 16
     },
-    4: {
+    5: {
       g: 0,
-      d: 10,
-      w: 11,
+      d: 11,
+      w: 13,
       p: 12,
       b: 13,
       s: 14
     },
     7: {
       g: 0,
-      d: 8,
-      w: 9,
-      p: 10,
-      b: 10,
-      s: 12
+      d: 10,
+      w: 12,
+      p: 11,
+      b: 12,
+      s: 13
     },
-    10: {
+    9: {
       g: 0,
-      d: 6,
-      w: 7,
+      d: 8,
+      w: 10,
+      p: 9,
+      b: 9,
+      s: 11
+    },
+    11: {
+      g: 0,
+      d: 7,
+      w: 9,
       p: 8,
       b: 8,
       s: 10
     },
     13: {
       g: 0,
-      d: 4,
-      w: 5,
+      d: 5,
+      w: 7,
       p: 6,
       b: 5,
       s: 8
     },
-    16: {
+    15: {
       g: 0,
-      d: 2,
-      w: 3,
+      d: 4,
+      w: 6,
+      p: 5,
+      b: 4,
+      s: 7
+    },
+    17: {
+      g: 0,
+      d: 3,
+      w: 5,
       p: 4,
-      b: 3,
+      b: 4,
       s: 6
-    },
-    19: {
-      g: 0,
-      d: 2,
-      w: 2,
-      p: 2,
-      b: 2,
-      s: 4
-    },
-    22: {
-      g: 0,
-      d: 2,
-      w: 2,
-      p: 2,
-      b: 2,
-      s: 2
-    },
+    }
   },
   monster_thac0: {
     0: 20,

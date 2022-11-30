@@ -78,7 +78,7 @@ export const registerSettings = function () {
     default: "",
     scope: "world",
     type: String,
-    config: false,
+    config: true,
     onChange: _ => window.location.reload()
   });
 };
