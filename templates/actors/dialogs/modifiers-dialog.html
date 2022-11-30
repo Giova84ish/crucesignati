@@ -1,0 +1,80 @@
+<form autocomplete="off">
+  <div class="attribute-bonuses">
+    <label>{{localize 'CRUCESIGNATI.scores.str.long'}}</label>
+    <ol>
+      <li>
+        {{localize 'CRUCESIGNATI.Melee'}} ({{data.scores.str.mod}})
+      </li>
+      <li>
+        {{localize 'CRUCESIGNATI.exploration.od.long'}} ({{data.exploration.odMod}} su 6)
+      </li>
+      <li>
+        {{localize 'CRUCESIGNATI.encumbranceMax'}} ({{data.scores.str.mod3}} Kg)
+      </li>
+    </ol>
+  </div>
+  <div class="attribute-bonuses">
+    <label>{{localize 'CRUCESIGNATI.scores.int.long'}}</label>
+    <ol>
+      <li>
+        {{localize 'CRUCESIGNATI.spellsMaxLevel'}} ({{data.scores.int.mod}})
+      </li>
+      <li>
+        {{localize 'CRUCESIGNATI.spellsLearningPercentage'}} ({{data.scores.int.mod2}} %)
+      </li>
+      <li>
+        {{localize 'CRUCESIGNATI.spellsMaxForLevel'}} ({{data.scores.int.mod3}})
+      </li>
+    </ol>
+  </div>
+  <div class="attribute-bonuses">
+    <label>{{localize 'CRUCESIGNATI.scores.wis.long'}}</label>
+    <ol>
+      <li>
+        {{localize 'CRUCESIGNATI.saves.magic.long'}} ({{data.scores.wis.mod}})
+      </li>
+      <li>
+        {{localize 'CRUCESIGNATI.spellsFailurePercentage'}} ({{data.scores.wis.mod2}} %)
+      </li>
+      <li>
+        {{localize 'CRUCESIGNATI.wisdomXpBonus'}} ({{data.scores.wis.mod3}} %)
+      </li>
+    </ol>
+  </div>
+  <div class="attribute-bonuses">
+    <label>{{localize 'CRUCESIGNATI.scores.dex.long'}}</label>
+    <ol>
+      <li>
+        {{localize 'CRUCESIGNATI.Missile'}} ({{data.scores.dex.mod}})
+      </li>
+      <li>
+        {{localize 'CRUCESIGNATI.Initiative'}} ({{data.scores.dex.init}})
+      </li>
+      <li>
+        {{localize 'CRUCESIGNATI.ArmorClass'}} ({{data.scores.dex.mod2}})
+      </li>
+    </ol>
+  </div>
+  <div class="attribute-bonuses">
+    <label>{{localize 'CRUCESIGNATI.scores.con.long'}}</label>
+    <ol>
+      <li>
+        {{localize 'CRUCESIGNATI.healthBonus'}} ({{data.scores.con.mod}})
+      </li>
+      <li>
+        {{localize 'CRUCESIGNATI.poisonSavesBonus'}} ({{data.scores.con.mod2}})
+      </li>
+    </ol>
+  </div>
+  <div class="attribute-bonuses">
+    <label>{{localize 'CRUCESIGNATI.scores.cha.long'}}</label>
+    <ol>
+      <li>
+        {{localize 'CRUCESIGNATI.NPCReaction'}} ({{data.scores.cha.npc}})
+      </li>
+      <li>
+        {{localize 'CRUCESIGNATI.RetainersMax'}} ({{data.scores.cha.mod2}})
+      </li>
+    </ol>
+  </div>
+</form>
