@@ -6,7 +6,7 @@ export class CrucesignatiCombat {
     // Check groups
     data.combatants = [];
     let groups = {};
-    combat.data.combatants.forEach((cbt) => {
+    combat.combatants.forEach((cbt) => {
       const group = cbt.getFlag("crucesignati", "group");
       groups[group] = { present: true };
       data.combatants.push(cbt);
@@ -26,12 +26,10 @@ export class CrucesignatiCombat {
       if (!data.combatants[i].actor) {
         return;
       }
-      if (data.combatants[i].actor.data.data.isSlow) {
-        data.combatants[i].update({initiative: CrucesignatiCombat.STATUS_SLOW});
-      } else {
-        const group = data.combatants[i].getFlag("crucesignati", "group");
-        data.combatants[i].update({initiative: groups[group].initiative});
-      }
+
+      const group = data.combatants[i].getFlag("crucesignati", "group");
+      data.combatants[i].update({initiative: groups[group].initiative});
+
     }
     combat.setupTurns();
   }
@@ -47,7 +45,7 @@ export class CrucesignatiCombat {
   static async individualInitiative(combat, data) {
     let updates = [];
     let messages = [];
-    combat.data.combatants.forEach((c, i) => {
+    combat.combatants.forEach((c, i) => {
       // This comes from foundry.js, had to remove the update turns thing
       // Roll initiative
       const cf = c._getInitiativeFormula(c);
@@ -62,7 +60,6 @@ export class CrucesignatiCombat {
       let rollMode = game.settings.get("core", "rollMode");;
       if ((c.token.hidden || c.hidden) && (rollMode === "roll")) rollMode = "gmroll";
 
-      // Construct chat message data
       // Construct chat message data
       let messageData = foundry.utils.mergeObject({
         speaker: {
@@ -89,11 +86,11 @@ export class CrucesignatiCombat {
   static format(object, html, user) {
     html.find(".initiative").each((_, span) => {
       span.innerHTML =
-        span.innerHTML == `${CrucesignatiCombat.STATUS_SLOW}`
+        span.innerHTML === `${CrucesignatiCombat.STATUS_SLOW}`
           ? '<i class="fas fa-weight-hanging"></i>'
           : span.innerHTML;
       span.innerHTML =
-        span.innerHTML == `${CrucesignatiCombat.STATUS_DIZZY}`
+        span.innerHTML === `${CrucesignatiCombat.STATUS_DIZZY}`
           ? '<i class="fas fa-dizzy"></i>'
           : span.innerHTML;
     });
@@ -149,11 +146,7 @@ export class CrucesignatiCombat {
   static updateCombatant(combatant, data) {
     let init = game.settings.get("crucesignati", "initiative");
     // Why do you reroll ?
-    if (combatant.actor.data.data.isSlow) {
-      data.initiative = -789;
-      return;
-    }
-    if (data.initiative && init == "group") {
+    if (data.initiative && init === "group") {
       let groupInit = data.initiative;
       const cmbtGroup = combatant.getFlag("crucesignati", "group");
       // Check if there are any members of the group with init
@@ -161,9 +154,9 @@ export class CrucesignatiCombat {
         const group = ct.getFlag("crucesignati", "group");
         if (
           ct.initiative &&
-          ct.initiative != "-789.00" &&
-          ct.id != data.id &&
-          group == cmbtGroup
+          ct.initiative !== "-789.00" &&
+          ct.id !== data.id &&
+          group === cmbtGroup
         ) {
           // Set init
           combatant.update({initiative: parseInt(ct.initiative)});
@@ -216,7 +209,7 @@ export class CrucesignatiCombat {
       }
       let data = {};
       CrucesignatiCombat.rollInitiative(game.combat, data);
-      game.combat.update({ data: data }).then(() => {
+      game.combat.update({ system: data }).then(() => {
         game.combat.setupTurns();
       });
     });
@@ -224,8 +217,9 @@ export class CrucesignatiCombat {
 
   static addCombatant(combat, data, options, id) {
     let token = canvas.tokens.get(data.tokenId);
+    // console.log(token);
     let color = "black";
-    switch (token.data.disposition) {
+    switch (token.system.disposition) {
       case -1:
         color = "red";
         break;
@@ -264,7 +258,7 @@ export class CrucesignatiCombat {
     }
     if (data.round !== 1) {
       if (reroll === "reset") {
-        CrucesignatiCombat.resetInitiative(combat, data, diff, id);
+        await CrucesignatiCombat.resetInitiative(combat, data, diff, id);
         return;
       } else if (reroll === "keep") {
         return;
@@ -273,7 +267,7 @@ export class CrucesignatiCombat {
     if (init === "group") {
       CrucesignatiCombat.rollInitiative(combat, data, diff, id);
     } else if (init === "individual") {
-      CrucesignatiCombat.individualInitiative(combat, data, diff, id);
+      await CrucesignatiCombat.individualInitiative(combat, data, diff, id);
     }
   }
 }

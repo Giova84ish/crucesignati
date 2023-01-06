@@ -78,7 +78,10 @@
 
   "CRUCESIGNATI.Attack": "Attack",
   "CRUCESIGNATI.Encumbrance": "Encumbrance",
-  "CRUCESIGNATI.encumbranceMax": "Max Encumbrance",
+  "CRUCESIGNATI.encumbranceLight": "Light Encumbrance",
+  "CRUCESIGNATI.encumbranceMedium": "Medium Encumbrance (-1 to hit)",
+  "CRUCESIGNATI.encumbranceHeavy": "Heavy Encumbrance (-2 to hit, +1 AC)",
+  "CRUCESIGNATI.encumbranceMax": "Max Encumbrance (-4 to hit, +4 AC)",
   "CRUCESIGNATI.Retainer": "Retainer",
   "CRUCESIGNATI.RetainerWage": "Wage",
   "CRUCESIGNATI.RetainerUpkeep": "Upkeep",
@@ -98,6 +101,8 @@
   "CRUCESIGNATI.scores.cha.long": "Charisma",
   "CRUCESIGNATI.scores.cha.short": "CHA",
 
+  "CRUCESIGNATI.saves.generic.short": "ST",
+  "CRUCESIGNATI.saves.generic.long": "Saving throw",
   "CRUCESIGNATI.saves.death.short": "D",
   "CRUCESIGNATI.saves.death.long": "Death Poison",
   "CRUCESIGNATI.saves.wand.short": "W",

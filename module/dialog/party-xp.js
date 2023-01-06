@@ -27,10 +27,13 @@ export class CrucesignatiPartyXP extends FormApplication {
      * @return {Object}
      */
     getData() {
-        const actors = this.object.documents.filter(e => e.data.type === "character" && e.data.flags.crucesignati && e.data.flags.crucesignati.party === true);
+
+        const actors = this.object.documents.filter(e => {
+            return e.type === "character" && e.flags.crucesignati && e.flags.crucesignati.party === true
+        });
         let data = {
             actors: actors,
-            data: this.object,
+            system: this.object,
             config: CONFIG.CRUCESIGNATI,
             user: game.user,
             settings: settings
@@ -52,12 +55,16 @@ export class CrucesignatiPartyXP extends FormApplication {
     /* -------------------------------------------- */
 
     _calculateShare(ev) {
-        const actors = this.object.documents.filter(e => e.data.type === "character" && e.data.flags.crucesignati && e.data.flags.crucesignati.party === true);
+        const actors = this.object.documents.filter(e => { 
+
+            return e.type === "character" && e.flags.crucesignati && e.flags.crucesignati.party === true
+        });
         const toDeal = $(ev.currentTarget.parentElement).find('input[name="total"]').val();
         const html = $(this.form);
         const value = parseFloat(toDeal) / actors.length;
         actors.forEach(a => {
-            html.find(`li[data-actor-id='${a.id}'] input`).val(Math.floor(a.data.data.details.xp.share / 100 * value));
+
+            html.find(`li[data-actor-id='${a.id}'] input`).val(Math.floor(a.system.details.xp.share / 100 * value));
         })
     }
 

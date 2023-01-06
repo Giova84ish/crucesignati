@@ -42,62 +42,71 @@ export class CrucesignatiActorSheetCharacter extends CrucesignatiActorSheet {
    * @private
    */
   _prepareItems(data) {
-    const itemsData = this.actor.data.items;
+    // console.log(this.actor, data)
+    const itemsData = this.actor.items;
     const containerContents = {};
     // Partition items by category
-    let [containers, treasures, items, weapons, armors, abilities, spells] = itemsData.reduce(
-      (arr, item) => {
-        // Classify items into types
-        const containerId = item?.data?.data?.containerId;
-        if (containerId) {
-          containerContents[containerId] = [...(containerContents[containerId] || []), item];
-        }
-        else if (item.type === "container") arr[0].push(item);
-        else if (item.type === "item" && item?.data?.data?.treasure) arr[1].push(item);
-        else if (item.type === "item") arr[2].push(item);
-        else if (item.type === "weapon") arr[3].push(item);
-        else if (item.type === "armor") arr[4].push(item);
-        else if (item.type === "ability") arr[5].push(item);
-        else if (item.type === "spell") arr[6].push(item);
-        return arr;
-      },
-      [[], [], [], [], [], [], []]
-    );
-    // Sort spells by level
-    var sortedSpells = {};
-    var slots = {};
-    for (var i = 0; i < spells.length; i++) {
-      const lvl = spells[i].data.data.lvl;
-      if (!sortedSpells[lvl]) sortedSpells[lvl] = [];
-      if (!slots[lvl]) slots[lvl] = 0;
-      slots[lvl] += spells[i].data.data.memorized;
-      sortedSpells[lvl].push(spells[i]);
-    }
-    data.slots = {
-      used: slots,
-    };
-    containers.map((container, key, arr) => {
-      arr[key].data.data.itemIds = containerContents[container.id] || [];
-      arr[key].data.data.totalWeight = containerContents[container.id]?.reduce((acc, item) => {
-        return acc + item.data?.data?.weight * (item.data?.data?.quantity?.value || 1);
-      }, 0);
-      return arr;
-    });
-    
-    // Assign and return
-    data.owned = {
-      items: items,
-      armors: armors,
-      weapons: weapons,
-      treasures: treasures,
-      containers: containers,
-    };
-    data.containers = containers;
-    data.abilities = abilities;
-    data.spells = sortedSpells;
+    if (itemsData){
+      let [containers, treasures, items, weapons, armors, abilities, spells] = itemsData.reduce(
+          (arr, item) => {
+            // Classify items into types
 
-    // Sort by sort order (see ActorSheet)
-    [...Object.values(data.owned), ...Object.values(data.spells), data.abilities].forEach(o => o.sort((a, b) => (a.data.sort || 0) - (b.data.sort || 0)));
+            const containerId = item?.system?.containerId;
+            if (containerId) {
+              containerContents[containerId] = [...(containerContents[containerId] || []), item];
+            }
+            else if (item.type === "container") arr[0].push(item);
+            else if (item.type === "item" && item?.system?.treasure) arr[1].push(item);
+            else if (item.type === "item") arr[2].push(item);
+            else if (item.type === "weapon") arr[3].push(item);
+            else if (item.type === "armor") arr[4].push(item);
+            else if (item.type === "ability") arr[5].push(item);
+            else if (item.type === "spell") arr[6].push(item);
+            return arr;
+          },
+          [[], [], [], [], [], [], []]
+      );
+      // Sort spells by level
+      var sortedSpells = [];
+      var slots = [];
+      for (var i = 0; i < spells.length; i++) {
+        const lvl = spells[i].system.lvl;
+        if (!sortedSpells[lvl]) sortedSpells[lvl] = [];
+        if (!slots[lvl]) slots[lvl] = 0;
+        slots[lvl] += spells[i].system.memorized;
+        sortedSpells[lvl].push(spells[i]);
+      }
+      data.slots = {
+        used: slots,
+      };
+      containers.map((container, key, arr) => {
+        arr[key].system.itemIds = containerContents[container.id] || [];
+        arr[key].system.totalWeight = containerContents[container.id]?.reduce((acc, item) => {
+          return acc + item.system?.weight * (item.system?.quantity?.value || 1);
+        }, 0);
+        return arr;
+      });
+
+      // Assign and return
+      data.owned = {
+        items: items,
+        armors: armors,
+        weapons: weapons,
+        treasures: treasures,
+        containers: containers,
+      };
+      data.containers = containers;
+      data.abilities = abilities;
+      data.spells = sortedSpells;
+
+      // Sort by sort order (see ActorSheet)
+      [
+          ...Object.values(data.owned),
+        ...Object.values(data.spells),
+        data.abilities
+      ].forEach(o => o.sort((a, b) => (a.sort || 0) - (b.sort || 0)));
+    }
+
   }
 
   generateScores() {
@@ -153,7 +162,7 @@ export class CrucesignatiActorSheetCharacter extends CrucesignatiActorSheet {
   }
 
   _pushLang(table) {
-    const data = this.actor.data.data;
+    const data = this.actor.system;
     let update = duplicate(data[table]);
     this._chooseLang().then((dialogInput) => {
       const name = CONFIG.CRUCESIGNATI.languages[dialogInput.choice];
@@ -164,16 +173,16 @@ export class CrucesignatiActorSheetCharacter extends CrucesignatiActorSheet {
       }
       let newData = {};
       newData[table] = update;
-      return this.actor.update({ data: newData });
+      return this.actor.update({ system: newData });
     });
   }
 
   _popLang(table, lang) {
-    const data = this.actor.data.data;
+    const data = this.actor.system;
     let update = data[table].value.filter((el) => el != lang);
     let newData = {};
     newData[table] = { value: update };
-    return this.actor.update({ data: newData });
+    return this.actor.update({ system: newData });
   }
 
   /* -------------------------------------------- */
@@ -269,8 +278,8 @@ export class CrucesignatiActorSheetCharacter extends CrucesignatiActorSheet {
     html.find(".item-delete").click((ev) => {
       const li = ev.currentTarget.closest(".item");
       const item = this.actor.items.get(li.dataset.itemId);
-      if (item.type == "container") {
-        const updateData = item.data.data.itemIds.reduce((acc, val) => {
+      if (item.type === "container") {
+        const updateData = item.system.itemIds.reduce((acc, val) => {
           acc.push({
             _id: val.id,
             "data.containerId": ""
@@ -305,14 +314,17 @@ export class CrucesignatiActorSheetCharacter extends CrucesignatiActorSheet {
 
     html.find(".item-create").click((event) => {
       event.preventDefault();
+      // console.log("ITEM", event)
       const header = event.currentTarget;
       const type = header.dataset.type;
+      // console.log("ITEM", header, type)
       const itemData = {
         name: `New ${type.capitalize()}`,
         type: type,
-        data: duplicate(header.dataset),
+        system: duplicate(header.dataset),
       };
-      delete itemData.data["type"];
+      // console.log("ITEM", itemData)
+      delete itemData.system["type"];
       return this.actor.createEmbeddedDocuments("Item", [itemData]);
     });
 
@@ -321,8 +333,8 @@ export class CrucesignatiActorSheetCharacter extends CrucesignatiActorSheet {
       const li = $(ev.currentTarget).parents(".item");
       const item = this.actor.items.get(li.data("itemId"));
       await item.update({
-        data: {
-          equipped: !item.data.data.equipped,
+        system: {
+          equipped: !item.system.equipped,
         },
       });
     });

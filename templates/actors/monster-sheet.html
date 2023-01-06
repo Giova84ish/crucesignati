@@ -1,5 +1,7 @@
 <form class="{{cssClass}}" autocomplete="off">
   {{! Sheet Header }}
+
+  {{{data}}}
   <header class="sheet-header flexrow">
     {{> "systems/crucesignati/templates/actors/partials/monster-header.html"}}
   </header>
@@ -9,12 +11,12 @@
     <a class="item" data-tab="attributes">
       {{localize "CRUCESIGNATI.category.attributes"}}
     </a>
-    {{#if data.config.enableInventory}}
+    {{#if system.config.enableInventory}}
     <a class="item" data-tab="inventory">
       {{localize "CRUCESIGNATI.category.inventory"}}
     </a>
     {{/if}}
-    {{#if data.spells.enabled}}
+    {{#if system.spells.enabled}}
     <a class="item" data-tab="spells">
       {{localize "CRUCESIGNATI.category.spells"}}
     </a>
@@ -29,12 +31,12 @@
     <div class="tab" data-group="primary" data-tab="attributes">
       {{> "systems/crucesignati/templates/actors/partials/monster-attributes-tab.html"}}
     </div>
-    {{#if data.config.enableInventory}}
+    {{#if system.config.enableInventory}}
     <div class="tab" data-group="primary" data-tab="inventory">
     {{> "systems/crucesignati/templates/actors/partials/character-inventory-tab.html"}}
     </div>
     {{/if}}
-    {{#if data.spells.enabled}}
+    {{#if system.spells.enabled}}
     <div class="tab" data-group="primary" data-tab="spells">
       {{> "systems/crucesignati/templates/actors/partials/character-spells-tab.html"}}
     </div>
@@ -43,7 +45,7 @@
       <div class="inventory">
         <div class="item-titles">{{localize "CRUCESIGNATI.category.notes"}}</div>
         <div class="resizable-editor" data-editor-size="320">
-          {{editor content=data.details.biography target="data.details.biography"
+          {{editor content=system.details.biography target="system.details.biography"
           button=true owner=owner editable=editable}}
         </div>
       </div>

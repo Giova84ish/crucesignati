@@ -15,7 +15,7 @@ export class CrucesignatiActorSheet extends ActorSheet {
     data.config = {
       ...CONFIG.CRUCESIGNATI,
       ascendingAC: game.settings.get("crucesignati", "ascendingAC"),
-      initiative: game.settings.get("crucesignati", "initiative") != "group",
+      initiative: game.settings.get("crucesignati", "initiative") !== "group",
       encumbrance: game.settings.get("crucesignati", "encumbranceOption")
     };
     data.isNew = this.actor.isNew();
@@ -25,7 +25,7 @@ export class CrucesignatiActorSheet extends ActorSheet {
 
   activateEditor(name, options, initialContent) {
     // remove some controls to the editor as the space is lacking
-    if (name == "data.details.description") {
+    if (name === "data.details.description") {
       options.toolbar = "styleselect bullist hr table removeFormat save";
     }
     super.activateEditor(name, options, initialContent);
@@ -35,7 +35,7 @@ export class CrucesignatiActorSheet extends ActorSheet {
     event.preventDefault();
     let li = $(event.currentTarget).parents(".item"),
       item = this.actor.items.get(li.data("item-id")),
-      description = TextEditor.enrichHTML(item.data.data.description);
+      description = TextEditor.enrichHTML(item.system.description, {async:false});
 
     // Toggle summary
     if (li.hasClass("expanded")) {
@@ -56,9 +56,9 @@ export class CrucesignatiActorSheet extends ActorSheet {
     event.preventDefault();
     const itemId = event.currentTarget.closest(".item").dataset.itemId;
     const item = this.actor.items.get(itemId);
-    if (event.target.dataset.field == "cast") {
+    if (event.target.dataset.field === "cast") {
       return item.update({ "data.cast": parseInt(event.target.value) });
-    } else if (event.target.dataset.field == "memorize") {
+    } else if (event.target.dataset.field === "memorize") {
       return item.update({
         "data.memorized": parseInt(event.target.value),
       });
@@ -74,7 +74,7 @@ export class CrucesignatiActorSheet extends ActorSheet {
       const item = this.actor.items.get(itemId);
       item.update({
         _id: item.id,
-        "data.cast": item.data.data.memorized,
+        "data.cast": item.system.memorized,
       });
     });
   }
@@ -103,17 +103,27 @@ export class CrucesignatiActorSheet extends ActorSheet {
     html.find(".item .item-rollable .item-image").click(async (ev) => {
       const li = $(ev.currentTarget).parents(".item");
       const item = this.actor.items.get(li.data("itemId"));
-      if (item.type == "weapon") {
-        if (this.actor.data.type === "monster") {
+      if (item.type === "weapon") {
+        if (this.actor.type === "monster") {
           item.update({
-            data: { counter: { value: item.data.data.counter.value - 1 } },
+            system: {
+              counter: {
+                value: item.system.counter.value - 1
+              }
+            },
           });
         }
-        item.rollWeapon({ skipDialog: ev.ctrlKey });
-      } else if (item.type == "spell") {
-        item.spendSpell({ skipDialog: ev.ctrlKey });
+        item.rollWeapon({
+          skipDialog: ev.ctrlKey
+        });
+      } else if (item.type === "spell") {
+        item.spendSpell({
+          skipDialog: ev.ctrlKey
+        });
       } else {
-        item.rollFormula({ skipDialog: ev.ctrlKey });
+        item.rollFormula({
+          skipDialog: ev.ctrlKey
+        });
       }
     });
 
@@ -122,7 +132,7 @@ export class CrucesignatiActorSheet extends ActorSheet {
       let element = ev.currentTarget;
       let attack = element.parentElement.parentElement.dataset.attack;
       const rollData = {
-        actor: this.data,
+        actor: this,
         roll: {},
       };
       actorObject.targetAttack(rollData, attack, {
@@ -153,14 +163,14 @@ export class CrucesignatiActorSheet extends ActorSheet {
       const el = ev.currentTarget.parentElement.parentElement.children[0];
       const id = el.dataset.itemId;
       const item = this.actor.items.get(id);
-      item.update({ "data.quantity.value": item.data.data.quantity.value + 1 });
+      item.update({ "data.quantity.value": item.system.quantity.value + 1 });
     });
 
     html.find(".item-entry .consumable-counter .full-mark").click(ev => {
       const el = ev.currentTarget.parentElement.parentElement.children[0];
       const id = el.dataset.itemId;
       const item = this.actor.items.get(id);
-      item.update({ "data.quantity.value": item.data.data.quantity.value - 1 });
+      item.update({ "data.quantity.value": item.system.quantity.value - 1 });
     });
   }
 
@@ -168,20 +178,23 @@ export class CrucesignatiActorSheet extends ActorSheet {
 
     // Dragging items into a container
     const source = this.actor.items.get(itemData._id);
+
     const siblings = this.actor.items.filter(i => {
-      return i.data._id !== source.data._id;
+      return i._id !== source._id;
     });
     const dropTarget = event.target.closest("[data-item-id]");
     const targetId = dropTarget ? dropTarget.dataset.itemId : null;
-    const target = siblings.find(s => s.data._id === targetId);
-    
-    if (target?.data.type == "container") {
+    const target = siblings.find(s =>{
+      // console.log({s});
+      return s._id === targetId;
+    } );
+    if (target?.type === "container") {
       this.actor.updateEmbeddedDocuments("Item", [
         { _id: source.id, "data.containerId": target.id }
       ]);
       return;
     }
-    if (itemData.data.containerId != "") {
+    if (itemData.containerId !== "") {
       this.actor.updateEmbeddedDocuments("Item", [
         { _id: source.id, "data.containerId": "" }
       ]);
@@ -192,12 +205,13 @@ export class CrucesignatiActorSheet extends ActorSheet {
 
   // Override to set resizable initial size
   async _renderInner(...args) {
+    // console.log(args);
     const html = await super._renderInner(...args);
     this.form = html[0];
 
     // Resize resizable classes
     let resizable = html.find(".resizable");
-    if (resizable.length == 0) {
+    if (resizable.length === 0) {
       return;
     }
     resizable.each((_, el) => {
@@ -212,7 +226,7 @@ export class CrucesignatiActorSheet extends ActorSheet {
 
     let html = $(this.form);
     let resizable = html.find(".resizable");
-    if (resizable.length == 0) {
+    if (resizable.length === 0) {
       return;
     }
     // Resize divs

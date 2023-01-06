@@ -1,4 +1,5 @@
 import { CrucesignatiDice } from "../dice.js";
+import {addChatMessageContextOptions} from "../chat.js";
 
 /**
  * Override and extend the basic :class:`Item` implementation
@@ -33,7 +34,14 @@ export class CrucesignatiItem extends Item {
   }
 
   getChatData(htmlOptions) {
-    const data = duplicate(this.data.data);
+    const data = duplicate(this.system);
+
+    // console.log(htmlOptions);
+    if (typeof(htmlOptions) === "object"){
+      htmlOptions.async = false;
+    } else {
+      htmlOptions = {async: false};
+    }
 
     // Rich text description
     data.description = TextEditor.enrichHTML(data.description, htmlOptions);
@@ -41,10 +49,10 @@ export class CrucesignatiItem extends Item {
     // Item properties
     const props = [];
 
-    if (this.data.type == "weapon") {
+    if (this.type === "weapon") {
       data.tags.forEach((t) => props.push(t.value));
     }
-    if (this.data.type == "spell") {
+    if (this.type === "spell") {
       props.push(`${data.class} ${data.lvl}`, data.range, data.duration);
     }
     if (data.hasOwnProperty("equipped")) {
@@ -57,15 +65,16 @@ export class CrucesignatiItem extends Item {
   }
 
   rollWeapon(options = {}) {
-    let isNPC = this.actor.data.type != "character";
+    let isNPC = this.actor.type !== "character";
     const targets = 5;
-    const data = this.data.data;
+    const data = this.system;
     let type = isNPC ? "attack" : "melee";
+    // console.log(this);
     const rollData = {
-      item: this.data,
-      actor: this.actor.data,
+      item: this,
+      actor: this.actor.system,
       roll: {
-        save: this.data.data.save,
+        save: this.system.save,
         target: null,
       },
     };
@@ -102,7 +111,8 @@ export class CrucesignatiItem extends Item {
   }
 
   async rollFormula(options = {}) {
-    const data = this.data.data;
+
+    const data = this.system;
     if (!data.roll) {
       throw new Error("Questo oggetto non ha una formula per tirare!");
     }
@@ -112,9 +122,10 @@ export class CrucesignatiItem extends Item {
 
     let type = data.rollType;
 
+
     const newData = {
-      actor: this.actor.data,
-      item: this.data,
+      actor: this.actor,
+      item: this,
       roll: {
         type: type,
         target: data.rollTarget,
@@ -126,7 +137,7 @@ export class CrucesignatiItem extends Item {
     return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
-      data: newData,
+      system: newData,
       skipDialog: true,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: game.i18n.format("CRUCESIGNATI.roll.formula", { label: label }),
@@ -136,8 +147,8 @@ export class CrucesignatiItem extends Item {
 
   spendSpell() {
     this.update({
-      data: {
-        cast: this.data.data.cast - 1,
+      system: {
+        cast: this.system.cast - 1,
       },
     }).then(() => {
       this.show({ skipDialog: true });
@@ -146,8 +157,8 @@ export class CrucesignatiItem extends Item {
 
   getTagList() {
     const tagList = [];
-    const data = this.data.data;
-    switch (this.data.type) {
+    const data = this.system;
+    switch (this.type) {
       case "container":
         return [];
       case "weapon":
@@ -203,7 +214,7 @@ export class CrucesignatiItem extends Item {
   }
 
   pushTag(values) {
-    const data = this.data.data;
+    const data = this.system;
     let update = [];
     if (data.tags) {
       update = duplicate(data.tags);
@@ -240,16 +251,16 @@ export class CrucesignatiItem extends Item {
       update = values;
     }
     newData.tags = update;
-    return this.update({ data: newData });
+    return this.update({ system: newData });
   }
 
   popTag(value) {
-    const data = this.data.data;
+    const data = this.system;
     let update = data.tags.filter((el) => el.value != value);
     let newData = {
       tags: update,
     };
-    return this.update({ data: newData });
+    return this.update({ system: newData });
   }
 
   roll() {
@@ -261,7 +272,7 @@ export class CrucesignatiItem extends Item {
         this.spendSpell();
         break;
       case "ability":
-        if (this.data.data.roll) {
+        if (this.system.roll) {
           this.rollFormula();
         } else {
           this.show();
@@ -283,16 +294,16 @@ export class CrucesignatiItem extends Item {
     const templateData = {
       actor: this.actor,
       tokenId: token ? `${token.parent.id}.${token.id}` : null,
-      item: foundry.utils.duplicate(this.data),
-      data: this.getChatData(),
+      item: foundry.utils.duplicate(this),
+      system: this.getChatData(),
       labels: this.labels,
       isHealing: this.isHealing,
       hasDamage: this.hasDamage,
-      isSpell: this.data.type === "spell",
+      isSpell: this.type === "spell",
       hasSave: this.hasSave,
       config: CONFIG.CRUCESIGNATI,
     };
-    templateData.data.properties = this.getTagList();
+    templateData.system.properties = this.getTagList();
 
     // Render the chat card template
     const template = `systems/crucesignati/templates/chat/item-card.html`;
@@ -372,8 +383,11 @@ export class CrucesignatiItem extends Item {
     }
 
     // Attack and Damage Rolls
-    if (action === "damage") await item.rollDamage({ event });
-    else if (action === "formula") await item.rollFormula({ event });
+    if (action === "damage"){
+      await item.rollDamage({ event });
+    } else if (action === "formula") {
+      await item.rollFormula({ event });
+    }
     // Saving Throws for card targets
     else if (action == "save") {
       if (!targets.length) {

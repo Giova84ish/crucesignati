@@ -1,9 +1,9 @@
 <form autocomplete="off">
-  {{#if (eq data.details.class 'guerriero')}}
+  {{#if (eq system.details.class 'guerriero')}}
   <div class="form-group">
     <label for="straordinaryStrenght">{{localize "CRUCESIGNATI.straordinaryStrenght"}}</label>
     <div class="form-fields">
-      <input type="text" name="data.details.straordinaryStrenght" id="straordinaryStrenght" value="{{data.details.straordinaryStrenght}}"
+      <input type="text" name="system.details.straordinaryStrenght" id="straordinaryStrenght" value="{{system.details.straordinaryStrenght}}"
         data-dtype="Number" />
     </div>
   </div>
@@ -11,14 +11,14 @@
   <div class="form-group">
     <label for="spellcaster">{{localize "CRUCESIGNATI.Spellcaster"}}</label>
     <div class="form-fields">
-      <input type="checkbox" name="data.spells.enabled" id="spellcaster" {{checked data.spells.enabled}}
+      <input type="checkbox" name="system.spells.enabled" id="spellcaster" {{checked system.spells.enabled}}
         data-dtype="Boolean" />
     </div>
   </div>
   <div class="form-group">
     <label>{{localize "CRUCESIGNATI.Speed"}}</label>
     <div class="form-fields">
-      <input type="text" name="data.speed" id="initiative" value="{{data.speed}}"
+      <input type="text" name="system.speed" id="initiative" value="{{system.speed}}"
         data-dtype="Number" />
     </div>
   </div>
@@ -26,34 +26,34 @@
   <div class="form-group">
     <label>{{localize "CRUCESIGNATI.details.experience.next"}}</label>
     <div class="form-fields">
-      <input type="text" name="data.details.xp.next" id="experiencenext" value="{{data.details.xp.next}}"
+      <input type="text" name="system.details.xp.next" id="experiencenext" value="{{system.details.xp.next}}"
         data-dtype="Number" />
     </div>
   </div>
   <div class="form-group">
     <label>{{localize "CRUCESIGNATI.details.experience.bonus"}} (%)</label>
     <div class="form-fields">
-      <input type="text" name="data.details.xp.bonus" id="experience" value="{{data.details.xp.bonus}}"
+      <input type="text" name="system.details.xp.bonus" id="experience" value="{{system.details.xp.bonus}}"
         data-dtype="Number" />
     </div>
   </div>
   <div class="form-group">
     <label>{{localize "CRUCESIGNATI.details.experience.share"}} (%)</label>
     <div class="form-fields">
-      <input type="text" name="data.details.xp.share" id="experience-share" value="{{data.details.xp.share}}"
+      <input type="text" name="system.details.xp.share" id="experience-share" value="{{system.details.xp.share}}"
         data-dtype="Number" />
     </div>
   </div>
   <div class="form-group">
     <label>{{localize "CRUCESIGNATI.MeleeBonus"}}</label>
     <div class="form-fields">
-      <input type="text" name="data.thac0.mod.melee" id="melee" value="{{data.thac0.mod.melee}}" data-dtype="Number" />
+      <input type="text" name="system.thac0.mod.melee" id="melee" value="{{system.thac0.mod.melee}}" data-dtype="Number" />
     </div>
   </div>
   <div class="form-group">
     <label>{{localize "CRUCESIGNATI.MissileBonus"}}</label>
     <div class="form-fields">
-      <input type="text" name="data.thac0.mod.missile" id="missile" value="{{data.thac0.mod.missile}}"
+      <input type="text" name="system.thac0.mod.missile" id="missile" value="{{system.thac0.mod.missile}}"
         data-dtype="Number" />
     </div>
   </div>
@@ -61,23 +61,23 @@
     <label>{{localize "CRUCESIGNATI.ArmorClassBonus"}}</label>
     <div class="form-fields">
       {{#if config.ascendingAC}}
-      <input type="text" name="data.aac.mod" id="ac" value="{{data.aac.mod}}" data-dtype="Number" />
+      <input type="text" name="system.aac.mod" id="ac" value="{{system.aac.mod}}" data-dtype="Number" />
       {{else}}
-      <input type="text" name="data.ac.mod" id="ac" value="{{data.ac.mod}}" data-dtype="Number" />
+      <input type="text" name="system.ac.mod" id="ac" value="{{system.ac.mod}}" data-dtype="Number" />
       {{/if}}
     </div>
   </div>
   <div class="form-group">
     <label>{{localize "CRUCESIGNATI.Encumbrance"}}</label>
     <div class="form-fields">
-      <input type="text" name="data.scores.str.mod3" id="encumbrance" value="{{data.scores.str.mod3}}"
+      <input type="text" name="system.scores.str.mod3" id="encumbrance" value="{{system.scores.str.mod3}}"
         data-dtype="Number" {{#unless user.isGM}}disabled{{/unless}} />
     </div>
   </div>
   <div class="form-group">
     <label for="movementAuto">{{localize "CRUCESIGNATI.Setting.MovementAuto"}}</label>
     <div class="form-fields">
-      <input type="checkbox" name="data.config.movementAuto" id="movementAuto" {{checked data.config.movementAuto}}
+      <input type="checkbox" name="system.config.movementAuto" id="movementAuto" {{checked system.config.movementAuto}}
         data-dtype="Boolean" {{#unless user.isGM}}disabled{{/unless}} />
     </div>
   </div>
@@ -85,7 +85,7 @@
   <div class="form-group">
     <label for="enableInventory">{{localize "CRUCESIGNATI.Setting.EnableInventory"}}</label>
     <div class="form-fields">
-      <input type="checkbox" name="data.config.enableInventory" id="enableInventory" {{checked data.config.enableInventory}}
+      <input type="checkbox" name="system.config.enableInventory" id="enableInventory" {{checked system.config.enableInventory}}
         data-dtype="Boolean" {{#unless user.isGM}}disabled{{/unless}} />
     </div>
   </div>

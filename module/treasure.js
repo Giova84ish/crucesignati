@@ -39,14 +39,14 @@ function drawTreasure(table, data) {
   data.treasure = {};
   if (table.getFlag('crucesignati', 'treasure')) {
     table.results.forEach((r) => {
-      if (percent(r.data.weight)) {
+      if (percent(r.weight)) {
         const text = r.getChatText(r);
         data.treasure[r.id] = ({
-          img: r.data.img,
-          text: TextEditor.enrichHTML(text),
+          img: r.img,
+          text: TextEditor.enrichHTML(text, {async:false}),
         });
-        if ((r.data.type === CONST.TABLE_RESULT_TYPES.ENTITY) && (r.data.collection === "RollTable")) {
-          const embeddedTable = game.tables.get(r.data.resultId);
+        if ((r.type === CONST.TABLE_RESULT_TYPES.ENTITY) && (r.collection === "RollTable")) {
+          const embeddedTable = game.tables.get(r.resultId);
           drawTreasure(embeddedTable, data.treasure[r.id]);
         }
       }
@@ -54,8 +54,8 @@ function drawTreasure(table, data) {
   } else {
     const results = table.evaluate({ async: false }).results;
     results.forEach((s) => {
-      const text = TextEditor.enrichHTML(table._getResultChatText(s));
-      data.treasure[s.id] = { img: s.data.img, text: text };
+      const text = TextEditor.enrichHTML(table._getResultChatText(s), {async:false});
+      data.treasure[s.id] = { img: s.img, text: text };
     });
   }
   return data;

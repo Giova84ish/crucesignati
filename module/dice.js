@@ -2,7 +2,7 @@ export class CrucesignatiDice {
 
   static async sendRoll({
     parts = [],
-    data = {},
+    system = {},
     title = null,
     flavor = null,
     speaker = null,
@@ -10,6 +10,7 @@ export class CrucesignatiDice {
 	chatMessage = true
   } = {}) {
 
+    // console.log({system})
     const template = "systems/crucesignati/templates/chat/roll-result.html";
 
     let chatData = {
@@ -20,7 +21,7 @@ export class CrucesignatiDice {
     const templateData = {
       title: title,
       flavor: flavor,
-      data: data,
+      system: system,
     };
 
     // Optionally include a situational bonus
@@ -29,14 +30,14 @@ export class CrucesignatiDice {
     }
 
     //;
-    const roll = new Roll(parts.join("+"), data).evaluate({async: false});
+    const roll = new Roll(parts.join("+"), system).evaluate({async: false});
 
     // Convert the roll to a chat message and return the roll
     let rollMode = game.settings.get("core", "rollMode");
     rollMode = form ? form.rollMode.value : rollMode;
 
     // Force blind roll (ability formulas)
-    if (!form && data.roll.blindroll) {
+    if (!form && system.roll.blindroll) {
       rollMode = game.user.isGM ? "selfroll" : "blindroll";
     }
 
@@ -45,10 +46,10 @@ export class CrucesignatiDice {
     if (rollMode === "selfroll") chatData["whisper"] = [game.user._id];
     if (rollMode === "blindroll") {
       chatData["blind"] = true;
-      data.roll.blindroll = true;
+      system.roll.blindroll = true;
     }
 
-    templateData.result = CrucesignatiDice.digestResult(data, roll);
+    templateData.result = CrucesignatiDice.digestResult(system, roll);
 
     return new Promise((resolve) => {
       roll.render().then((r) => {
@@ -90,28 +91,28 @@ export class CrucesignatiDice {
     };
 
     let die = roll.terms[0].total;
-    if (data.roll.type == "above") {
+    if (data.roll.type === "above") {
       // SAVING THROWS
       if (roll.total >= result.target) {
         result.isSuccess = true;
       } else {
         result.isFailure = true;
       }
-    } else if (data.roll.type == "below") {
+    } else if (data.roll.type === "below") {
       // MORALE, EXPLORATION
       if (roll.total <= result.target) {
         result.isSuccess = true;
       } else {
         result.isFailure = true;
       }
-    } else if (data.roll.type == "check") {
+    } else if (data.roll.type === "check") {
       // SCORE CHECKS (1s and 20s)
-      if (die == 1 || (roll.total <= result.target && die < 20)) {
+      if (die === 1 || (roll.total <= result.target && die < 20)) {
         result.isSuccess = true;
       } else {
         result.isFailure = true;
       }
-    } else if (data.roll.type == "table") {
+    } else if (data.roll.type === "table") {
       // Reaction
       let table = data.roll.table;
       let output = Object.values(table)[0];
@@ -126,16 +127,13 @@ export class CrucesignatiDice {
   }
 
   static attackIsSuccess(roll, thac0, ac) {
-    if (roll.total == 1 || roll.terms[0].results[0] == 1) {
+    if (roll.total === 1 || roll.terms[0].results[0] === 1) {
       return false;
     }
-    if (roll.total >= 20 || roll.terms[0].results[0] == 20) {
-      return true, -3;
-    }
-    if (roll.total + ac >= thac0) {
+    if (roll.total >= 20 || roll.terms[0].results[0] === 20) {
       return true;
     }
-    return false;
+    return roll.total + ac >= thac0;
   }
 
   static digestAttackResult(data, roll) {
@@ -147,16 +145,17 @@ export class CrucesignatiDice {
     };
     result.target = data.roll.thac0;
 
+    // console.log(data);
     const targetAc = data.roll.target
-      ? data.roll.target.actor.data.data.ac.value
+      ? data.roll.target.actor.system.ac.value
       : 9;
     const targetAac = data.roll.target
-      ? data.roll.target.actor.data.data.aac.value
+      ? data.roll.target.actor.system.aac.value
       : 0;
     result.victim = data.roll.target ? data.roll.target.data.name : null;
 
     if (game.settings.get("crucesignati", "ascendingAC")) {
-      if ((roll.terms[0] != 20 && (roll.total < targetAac) || roll.terms[0] == 1)) {
+      if ((roll.terms[0] !== 20 && (roll.total < targetAac) || roll.terms[0] === 1)) {
         result.details = game.i18n.format(
           "CRUCESIGNATI.messages.AttackAscendingFailure",
           {
@@ -188,7 +187,7 @@ export class CrucesignatiDice {
 
   static async sendAttackRoll({
     parts = [],
-    data = {},
+    system = {},
     title = null,
     flavor = null,
     speaker = null,
@@ -204,22 +203,24 @@ export class CrucesignatiDice {
     let templateData = {
       title: title,
       flavor: flavor,
-      data: data,
+      system: system,
       config: CONFIG.CRUCESIGNATI,
     };
+
+
 
     // Optionally include a situational bonus
     if (form !== null && form.bonus.value) parts.push(form.bonus.value);
 
-    const roll = new Roll(parts.join("+"), data).evaluate({async: false});
-    const dmgRoll = new Roll(data.roll.dmg.join("+"), data).evaluate({async: false});
+    const roll = new Roll(parts.join("+"), system).evaluate({async: false});
+    const dmgRoll = new Roll(system.roll.dmg.join("+"), system).evaluate({async: false});
 
     // Convert the roll to a chat message and return the roll
     let rollMode = game.settings.get("core", "rollMode");
     rollMode = form ? form.rollMode.value : rollMode;
 
     // Force blind roll (ability formulas)
-    if (data.roll.blindroll) {
+    if (system.roll.blindroll) {
       rollMode = game.user.isGM ? "selfroll" : "blindroll";
     }
 
@@ -228,10 +229,10 @@ export class CrucesignatiDice {
     if (rollMode === "selfroll") chatData["whisper"] = [game.user._id];
     if (rollMode === "blindroll") {
       chatData["blind"] = true;
-      data.roll.blindroll = true;
+      system.roll.blindroll = true;
     }
 
-    templateData.result = CrucesignatiDice.digestAttackResult(data, roll);
+    templateData.result = CrucesignatiDice.digestAttackResult(system, roll);
 
     return new Promise((resolve) => {
       roll.render().then((r) => {
@@ -283,7 +284,7 @@ export class CrucesignatiDice {
 
   static async RollSave({
     parts = [],
-    data = {},
+    system = {},
     skipDialog = false,
     speaker = null,
     flavor = null,
@@ -294,14 +295,14 @@ export class CrucesignatiDice {
     const template = "systems/crucesignati/templates/chat/roll-dialog.html";
     let dialogData = {
       formula: parts.join(" "),
-      data: data,
+      system: system,
       rollMode: game.settings.get("core", "rollMode"),
       rollModes: CONFIG.Dice.rollModes,
     };
 
     let rollData = {
       parts: parts,
-      data: data,
+      system: system,
       title: title,
       flavor: flavor,
       speaker: speaker,
@@ -323,10 +324,11 @@ export class CrucesignatiDice {
         label: game.i18n.localize("CRUCESIGNATI.saves.magic.short"),
         icon: '<i class="fas fa-magic"></i>',
         callback: (html) => {
+          // console.log(rollsystem)
           rolled = true;
           rollData.form = html[0].querySelector("form");
-          rollData.parts.push(`${rollData.data.roll.magic}`);
-          rollData.title += ` ${game.i18n.localize("CRUCESIGNATI.saves.magic.short")} (${rollData.data.roll.magic})`;
+          rollData.parts.push(`${rollsystem.data.roll.magic}`);
+          rollData.title += ` ${game.i18n.localize("CRUCESIGNATI.saves.magic.short")} (${rollsystem.data.roll.magic})`;
           roll = CrucesignatiDice.sendRoll(rollData);
         },
       },
@@ -356,7 +358,7 @@ export class CrucesignatiDice {
 
   static async Roll({
     parts = [],
-    data = {},
+    system = {},
     skipDialog = false,
     speaker = null,
     flavor = null,
@@ -365,23 +367,25 @@ export class CrucesignatiDice {
   } = {}) {
     let rolled = false;
     const template = "systems/crucesignati/templates/chat/roll-dialog.html";
+    // console.log(system);
     let dialogData = {
       formula: parts.join(" "),
-      data: data,
-      rollMode: data.roll.blindroll ? "blindroll" : game.settings.get("core", "rollMode"),
+      system: system,
+      rollMode: system.roll?.blindroll ? "blindroll" : game.settings.get("core", "rollMode"),
       rollModes: CONFIG.Dice.rollModes,
     };
 
     let rollData = {
       parts: parts,
-      data: data,
+      system: system,
       title: title,
       flavor: flavor,
       speaker: speaker,
 	  chatMessage: chatMessage
     };
+
     if (skipDialog) {
-      return ["melee", "missile", "attack"].includes(data.roll.type)
+      return ["melee", "missile", "attack"].includes(system.roll.type)
         ? CrucesignatiDice.sendAttackRoll(rollData)
         : CrucesignatiDice.sendRoll(rollData);
     }
@@ -393,7 +397,7 @@ export class CrucesignatiDice {
         callback: (html) => {
           rolled = true;
           rollData.form = html[0].querySelector("form");
-          roll = ["melee", "missile", "attack"].includes(data.roll.type)
+          roll = ["melee", "missile", "attack"].includes(system.roll.type)
             ? CrucesignatiDice.sendAttackRoll(rollData)
             : CrucesignatiDice.sendRoll(rollData);
         },

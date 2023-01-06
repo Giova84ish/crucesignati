@@ -2,21 +2,21 @@
   <li class="attribute flexrow" data-exploration="ld">
     <h4 class="attribute-name box-title" title="({{localize 'CRUCESIGNATI.SpeedShort'}}) {{localize 'CRUCESIGNATI.Speed'}}"><a>{{ localize "CRUCESIGNATI.Speed" }}</a></h4>
     <div class="attribute-value">
-      <input name="data.speed" type="text" value="{{data.speed}}" data-dtype="Number" placeholder="6" />
+      <input name="system.speed" type="text" value="{{system.speed}}" data-dtype="Number" placeholder="6" />
     </div>
   </li>
   <li class="attribute flexrow" data-exploration="od">
     <h4 class="attribute-name box-title" title="({{localize 'CRUCESIGNATI.exploration.od.abrev'}}) {{localize 'CRUCESIGNATI.exploration.od.long'}}"><a>{{ localize "CRUCESIGNATI.exploration.od.short" }}</a>
     </h4>
     <div class="attribute-value">
-      <input name="data.exploration.od" type="text" value="{{data.exploration.od}}" placeholder="0" data-dtype="String" />
+      <input name="system.exploration.od" type="text" value="{{system.exploration.od}}" placeholder="0" data-dtype="String" />
     </div>
   </li>
   <li class="attribute flexrow" data-exploration="sd">
     <h4 class="attribute-name box-title" title="({{localize 'CRUCESIGNATI.exploration.sd.abrev'}}) {{localize 'CRUCESIGNATI.exploration.sd.long'}}"><a>{{ localize "CRUCESIGNATI.exploration.sd.short" }}</a>
     </h4>
     <div class="attribute-value">
-      <input name="data.exploration.sd" type="text" value="{{data.exploration.sd}}" placeholder="0" data-dtype="String" />
+      <input name="system.exploration.sd" type="text" value="{{system.exploration.sd}}" placeholder="0" data-dtype="String" />
     </div>
   </li>  
 </ul>
@@ -34,7 +34,7 @@
     {{#each abilities as |item|}}
     <li class="item-entry">
       <div class="item flexrow" data-item-id="{{item.id}}">
-        <div class="item-name {{#if item.data.data.roll}}item-rollable{{/if}} flexrow">
+        <div class="item-name {{#if item.system.roll}}item-rollable{{/if}} flexrow">
           <div class="item-image" style="background-image: url({{item.img}})"></div>
           <a>
             <h4 title="{{item.name}}">

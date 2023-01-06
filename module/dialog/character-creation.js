@@ -77,6 +77,7 @@ export class CrucesignatiCharacterCreator extends FormApplication {
         .removeAttr("disabled");
     }
 
+    // console.log(this);
     this.object.data.stats = {
       sum: sum,
       avg: Math.round((10 * sum) / n) / 10,
@@ -103,7 +104,7 @@ export class CrucesignatiCharacterCreator extends FormApplication {
     return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
-      data: data,
+      system: data,
       skipDialog: true,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: game.i18n.format("CRUCESIGNATI.dialog.generateScore", {
@@ -118,6 +119,7 @@ export class CrucesignatiCharacterCreator extends FormApplication {
   }
 
   async close(options) {
+    // console.log(this)
     // Gather scores
     const speaker = ChatMessage.getSpeaker({ actor: this });
     const templateData = {
@@ -179,7 +181,7 @@ export class CrucesignatiCharacterCreator extends FormApplication {
     event,
     { updateData = null, preventClose = false, preventRender = false } = {}
   ) {
-    updateData = { ...updateData, data: { scores: this.scores } };
+    updateData = { ...updateData, system: { scores: this.scores } };
     super._onSubmit(event, {
       updateData: updateData,
       preventClose: preventClose,
@@ -190,7 +192,7 @@ export class CrucesignatiCharacterCreator extends FormApplication {
       name: "GP",
       type: "item",
       img: "/systems/crucesignati/assets/gold.png",
-      data: {
+      system: {
         treasure: true,
         cost: 1,
         weight: 1,

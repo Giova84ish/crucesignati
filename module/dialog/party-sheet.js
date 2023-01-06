@@ -1,4 +1,4 @@
-import { CrucesignatiPartyXP } from "./party-xp.js";
+import {CrucesignatiPartyXP} from "./party-xp.js";
 
 export class CrucesignatiPartySheet extends FormApplication {
   
@@ -32,13 +32,13 @@ export class CrucesignatiPartySheet extends FormApplication {
     const settings = {
       ascending: game.settings.get('crucesignati', 'ascendingAC')
     };
-    let data = {
-      data: this.object,
+
+    return {
+      system: this.object,
       config: CONFIG.CRUCESIGNATI,
       user: game.user,
       settings: settings
     };
-    return data;
   }
 
   _onDrop(event) {
@@ -46,8 +46,11 @@ export class CrucesignatiPartySheet extends FormApplication {
     // WIP Drop Items
     let data;
     try {
+
       data = JSON.parse(event.dataTransfer.getData("text/plain"));
+
       if (data.type !== "Item") return;
+
     } catch (err) {
       return false;
     }
@@ -59,7 +62,26 @@ export class CrucesignatiPartySheet extends FormApplication {
   }
 
   async _selectActors(ev) {
-    const entities = this.object.documents.sort((a, b) => b.data.token.disposition - a.data.token.disposition);
+
+    const entities = this.object.documents;
+    /*
+    const entities = this.object.documents.sort((a, b) => {
+      if (b.token?.disposition && a.token?.disposition){
+        return b.token.disposition - a.token.disposition
+      } else {
+        return 0
+      }
+    });
+
+     */
+    for(let i = 0; i<entities.length; i++) {
+      if (entities[i].type === "character"){
+        entities[i].isChar = true;
+      } else {
+        entities[i].isChar = false;
+      }
+
+    }
     const template = "/systems/crucesignati/templates/apps/party-select.html";
     const templateData = {
       actors: entities

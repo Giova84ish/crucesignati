@@ -8,7 +8,7 @@
   <ul class="summary flexrow">
     <li class="flex2 flexrow check-field">
       <div>
-        <input type="text" name="data.details.alignment" value="{{data.details.alignment}}" />
+        <input type="text" name="system.details.alignment" value="{{system.details.alignment}}" />
         <label>{{localize 'CRUCESIGNATI.details.alignment'}}</label>
       </div>
       <div class="check reaction-check" title="{{localize 'CRUCESIGNATI.roll.reaction'}}"><a><i class="fas fa-dice"></i></a>
@@ -16,21 +16,21 @@
     </li>
     <li class="flexrow check-field" data-check="dungeon">
       <div>
-        <input type="text" name="data.details.appearing.d" value="{{data.details.appearing.d}}" />
+        <input type="text" name="system.details.appearing.d" value="{{system.details.appearing.d}}" />
         <label>{{localize 'CRUCESIGNATI.details.appearing'}}</label>
       </div>
       <div class="check appearing-check" title="{{localize 'CRUCESIGNATI.roll.appearing'}}"><a><i class="fas fa-dice"></i></a>
       </div>
     </li>
     <li class="flexrow check-field" data-check="wilderness">
-      (<div><input type="text" name="data.details.appearing.w" value="{{data.details.appearing.w}}" /></div>)
+      (<div><input type="text" name="system.details.appearing.w" value="{{system.details.appearing.w}}" /></div>)
       <div class="check appearing-check" title="{{localize 'CRUCESIGNATI.roll.appearing'}}"><a><i class="fas fa-dice"></i></a>
       </div>
     </li>
     {{#if config.morale}}
     <li class="flexrow check-field">
       <div>
-        <input type="text" name="data.details.morale" value="{{data.details.morale}}" />
+        <input type="text" name="system.details.morale" value="{{system.details.morale}}" />
         <label>{{localize 'CRUCESIGNATI.details.morale'}}</label>
       </div>
       <div class="check morale-check" title="{{localize 'CRUCESIGNATI.roll.morale'}}"><a><i class="fas fa-dice"></i></a></div>
@@ -39,11 +39,11 @@
   </ul>
   <ul class="summary flexrow">
     <li>
-      <input type="text" name="data.details.xp" value="{{data.details.xp}}" />
+      <input type="text" name="system.details.xp" value="{{system.details.xp}}" />
       <label>{{localize 'CRUCESIGNATI.details.experience.award'}}</label>
     </li>
     <li class="treasure-table" title="{{localize 'CRUCESIGNATI.details.treasureTableHint'}}">
-      <div>{{{data.details.treasure.link}}}</div>
+      <div>{{{system.details.treasure.link}}}</div>
       <label>{{localize 'CRUCESIGNATI.details.treasure'}}</label>
     </li>
   </ul>

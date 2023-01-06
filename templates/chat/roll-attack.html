@@ -1,14 +1,14 @@
-<div class="crucesignati chat-card item-card" data-actor-id="{{data.actor.id}}" data-item-id="{{data.item.id}}"
+<div class="crucesignati chat-card item-card" data-actor-id="{{system.actor.id}}" data-item-id="{{system.item.id}}"
     {{#if tokenId}}data-token-id="{{tokenId}}" {{/if}}>
     <div class="crucesignati chat-block">
         <div class="flexrow chat-header">
             <div class="chat-title">
                 <h2>{{title}}</h2>
             </div>
-            {{#if data.item}}
-            <div class="chat-img" style="background-image:url('{{data.item.img}}')"></div>
+            {{#if system.item}}
+            <div class="chat-img" style="background-image:url('{{system.item.img}}')"></div>
             {{else}}
-            <div class="chat-img" style="background-image:url('{{data.actor.img}}')"></div>
+            <div class="chat-img" style="background-image:url('{{system.actor.img}}')"></div>
             {{/if}}
         </div>
         {{#if result.victim}}
@@ -16,7 +16,7 @@
             vs {{result.victim}}
         </div>
         {{/if}}
-        <div class="blindable" data-blind="{{data.roll.blindroll}}">
+        <div class="blindable" data-blind="{{system.roll.blindroll}}">
             <div class="chat-details">
                 <div class="roll-result">{{{result.details}}}</div>
             </div>
@@ -26,10 +26,10 @@
                 <div class="roll-result"><b>{{localize 'CRUCESIGNATI.messages.InflictsDamage'}}</b></div>
             </div>
             <div class="damage-roll">{{{rollDamage}}}</div>
-            {{#if data.roll.save}}
+            {{#if system.roll.save}}
             <div class="card-buttons">
-                <button data-action="save" data-save="{{data.roll.save}}" disabled>
-                    {{lookup config.saves_long data.roll.save}} - {{localize "CRUCESIGNATI.spells.Save"}}
+                <button data-action="save" data-save="{{system.roll.save}}" disabled>
+                    {{lookup config.saves_long system.roll.save}} - {{localize "CRUCESIGNATI.spells.Save"}}
                 </button>
             </div>
             {{/if}}

@@ -123,7 +123,7 @@ Hooks.on("renderSidebarTab", async (object, html) => {
 
 Hooks.on("preCreateCombatant", (combat, data, options, id) => {
   let init = game.settings.get("crucesignati", "initiative");
-  if (init == "group") {
+  if (init === "group") {
     CrucesignatiCombat.addCombatant(combat, data, options, id);
   }
 });

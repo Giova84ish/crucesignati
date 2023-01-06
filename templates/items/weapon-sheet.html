@@ -23,8 +23,8 @@
             <div class="form-fields">
               <input
                 type="text"
-                name="data.cost"
-                value="{{data.cost}}"
+                name="system.cost"
+                value="{{system.cost}}"
                 data-dtype="Number"
                 />
             </div>
@@ -35,8 +35,8 @@
             <div class="form-fields">
               <input
                 type="text"
-                name="data.weight"
-                value="{{data.weight}}"
+                name="system.weight"
+                value="{{system.weight}}"
                 data-dtype="Number"
                 />
             </div>
@@ -44,7 +44,7 @@
         </div>
       </div>
       <ol class="tag-list">
-        {{#each data.tags as |tag|}}
+        {{#each system.tags as |tag|}}
         <li class="tag" title="{{tag.title}}" data-tag="{{tag.value}}">
           <span>{{tag.value}}</span>
           <a class="tag-delete"><i class="fas fa-times"></i></a>
@@ -71,8 +71,8 @@
           <div class="form-fields">
             <input
               type="text"
-              name="data.damage"
-              value="{{data.damage}}"
+              name="system.damage"
+              value="{{system.damage}}"
               data-dtype="String"
               />
           </div>
@@ -83,8 +83,8 @@
           <div class="form-fields">
             <input
               type="text"
-              name="data.bonus"
-              value="{{data.bonus}}"
+              name="system.bonus"
+              value="{{system.bonus}}"
               data-dtype="Number"
               />
           </div>
@@ -95,40 +95,40 @@
           <div class="form-fields">
             <input
               type="text"
-              name="data.speed"
-              value="{{data.speed}}"
+              name="system.speed"
+              value="{{system.speed}}"
               data-dtype="Number"
               />
           </div>
         </div>
         <div class="form-group attack-type">
           <a title="{{localize 'CRUCESIGNATI.items.Melee'}}" class="melee-toggle {{#if
-            data.melee}}active{{/if}}"><i class="fas fa-fist-raised"></i></a>
+            system.melee}}active{{/if}}"><i class="fas fa-fist-raised"></i></a>
           <a title="{{localize 'CRUCESIGNATI.items.Missile'}}" class="missile-toggle
-            {{#if data.missile}}active{{/if}}"><i class="fas fa-bullseye"></i></a>
+            {{#if system.missile}}active{{/if}}"><i class="fas fa-bullseye"></i></a>
         </div>
-        {{#if data.missile}}
+        {{#if system.missile}}
         <div class="form-group block-input">
           <label>{{localize 'CRUCESIGNATI.items.Range'}}</label>
           <div class="form-fields range">
             <input
               type="text"
-              name="data.range.short"
-              value="{{data.range.short}}"
+              name="system.range.short"
+              value="{{system.range.short}}"
               data-dtype="Number"
               />
               <div class="sep"></div>
               <input
               type="text"
-              name="data.range.medium"
-              value="{{data.range.medium}}"
+              name="system.range.medium"
+              value="{{system.range.medium}}"
               data-dtype="Number"
               />
               <div class="sep"></div>
               <input
               type="text"
-              name="data.range.long"
-              value="{{data.range.long}}"
+              name="system.range.long"
+              value="{{system.range.long}}"
               data-dtype="Number"
               />
           </div>
@@ -138,12 +138,12 @@
         <div class="form-group">
           <label>{{localize 'CRUCESIGNATI.spells.Save'}}</label>
           <div class="form-fields">
-            <input type="checkbox" name="data.save" value="{{data.save}}" {{checked data.save}}  data-dtype="Boolean"/>
+            <input type="checkbox" name="system.save" value="{{system.save}}" {{checked system.save}}  data-dtype="Boolean"/>
           </div>
         </div>
       </div>
       <div class="description weapon-editor">
-        {{editor content=data.description target="data.description" button=true
+        {{editor content=system.description target="system.description" button=true
         owner=owner editable=editable}}
       </div>
     </div>

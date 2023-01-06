@@ -37,7 +37,8 @@ export class CrucesignatiActorSheetMonster extends CrucesignatiActorSheet {
    * @private
    */
   _prepareItems(data) {
-    const itemsData = this.actor.data.items;
+
+    const itemsData = this.actor.items;
     const containerContents = {};
     const attackPatterns = {};
 
@@ -45,15 +46,15 @@ export class CrucesignatiActorSheetMonster extends CrucesignatiActorSheet {
     let [items, armors, spells, containers] = itemsData.reduce(
       (arr, item) => {
         // Classify items into types
-        const containerId = item?.data?.data?.containerId;
+        const containerId = item?.system?.containerId;
         if (containerId) {
           containerContents[containerId] = [...(containerContents[containerId] || []), item];
           return arr;
         }
         // Grab attack groups
         if (["weapon", "ability"].includes(item.type)) {
-          if (attackPatterns[item.data.data.pattern] === undefined) attackPatterns[item.data.data.pattern] = [];
-          attackPatterns[item.data.data.pattern].push(item);
+          if (attackPatterns[item.system.pattern] === undefined) attackPatterns[item.system.pattern] = [];
+          attackPatterns[item.system.pattern].push(item);
           return arr;
         }
         // Classify items into types
@@ -69,19 +70,21 @@ export class CrucesignatiActorSheetMonster extends CrucesignatiActorSheet {
     var sortedSpells = {};
     var slots = {};
     for (var i = 0; i < spells.length; i++) {
-      let lvl = spells[i].data.data.lvl;
+      let lvl = spells[i].system.lvl;
       if (!sortedSpells[lvl]) sortedSpells[lvl] = [];
       if (!slots[lvl]) slots[lvl] = 0;
-      slots[lvl] += spells[i].data.data.memorized;
+      slots[lvl] += spells[i].system.memorized;
       sortedSpells[lvl].push(spells[i]);
     }
     data.slots = {
       used: slots,
     };
     containers.map((container, key, arr) => {
-      arr[key].data.data.itemIds = containerContents[container.id] || [];
-      arr[key].data.data.totalWeight = containerContents[container.id]?.reduce((acc, item) => {
-        return acc + item.data?.data?.weight * (item.data?.data?.quantity?.value || 1);
+      // console.log(key, arr, container)
+      arr[key].system.itemIds = containerContents[container.id] || [];
+      arr[key].system.totalWeight = containerContents[container.id]?.reduce((acc, item) => {
+        // console.log(item)
+        return acc + item?.weight * (item?.quantity?.value || 1);
       }, 0);
       return arr;
     });
@@ -93,7 +96,11 @@ export class CrucesignatiActorSheetMonster extends CrucesignatiActorSheet {
     };
     data.attackPatterns = attackPatterns;
     data.spells = sortedSpells;
-    [...Object.values(data.attackPatterns), ...Object.values(data.owned), ...Object.values(data.spells)].forEach(o => o.sort((a, b) => (a.data.sort || 0) - (b.data.sort || 0)));
+    [
+      ...Object.values(data.attackPatterns),
+      ...Object.values(data.owned),
+      ...Object.values(data.spells)
+    ].forEach(o => o.sort((a, b) => (a.sort || 0) - (b.sort || 0)));
   
   }
 
@@ -108,7 +115,7 @@ export class CrucesignatiActorSheetMonster extends CrucesignatiActorSheet {
 
     // Settings
     data.config.morale = game.settings.get("crucesignati", "morale");
-    data.data.details.treasure.link = TextEditor.enrichHTML(data.data.details.treasure.table);
+    data.system.details.treasure.link = TextEditor.enrichHTML(data.system.details.treasure.table, {async:false});
     data.isNew = this.actor.isNew();
     return data;
   }
@@ -203,13 +210,14 @@ export class CrucesignatiActorSheetMonster extends CrucesignatiActorSheet {
   }
 
   async _resetAttacks(event) {
-    const weapons = this.actor.data.items.filter(i => i.type === 'weapon');
+    // console.log(this.actor)
+    const weapons = this.actor.items.filter(i => i.type === 'weapon');
     for (let wp of weapons) {
       const item = this.actor.items.get(wp.id);
       await item.update({
-        data: {
+        system: {
           counter: {
-            value: parseInt(wp.data.data.counter.max),
+            value: parseInt(wp.system.counter.max),
           },
         },
       });
@@ -281,9 +289,9 @@ export class CrucesignatiActorSheetMonster extends CrucesignatiActorSheet {
         const itemData = {
           name: name ? name : `New ${type.capitalize()}`,
           type: type,
-          data: duplicate(header.dataset),
+          system: duplicate(header.dataset),
         };
-        delete itemData.data["type"];
+        delete itemData.system["type"];
         return itemData;
       };
 
@@ -317,10 +325,10 @@ export class CrucesignatiActorSheetMonster extends CrucesignatiActorSheet {
     html.find(".item-pattern").click(ev => {
       const li = $(ev.currentTarget).parents(".item");
       const item = this.actor.items.get(li.data("itemId"));
-      let currentColor = item.data.data.pattern;
+      let currentColor = item.system.pattern;
       let colors = Object.keys(CONFIG.CRUCESIGNATI.colors);
       let index = colors.indexOf(currentColor);
-      if (index + 1 == colors.length) {
+      if (index + 1 === colors.length) {
         index = 0;
       } else {
         index++;

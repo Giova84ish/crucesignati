@@ -198,6 +198,7 @@
   "CRUCESIGNATI.Setting.AscendingAC": "Classe Armatura Ascendente",
   "CRUCESIGNATI.Setting.AscendingACHint": "Più alta è, meglio è",
   "CRUCESIGNATI.Setting.Morale": "Abilita il Morale dei mostri",
+  "CRUCESIGNATI.Settings.None": "No further settings are needed.",
   "CRUCESIGNATI.Setting.MoraleHint": "Il Morale viene mostrato sulla scheda del mostro",
   "CRUCESIGNATI.Setting.Encumbrance": "Ingombro",
   "CRUCESIGNATI.Setting.EncumbranceHint": "Scegli il metodo di calcolo dell'ingombro",
@@ -217,6 +218,7 @@
   "CRUCESIGNATI.items.Misc": "Altro",
   "CRUCESIGNATI.items.Weapons": "Armi",
   "CRUCESIGNATI.items.Treasure": "Tesori",
+  "CRUCESIGNATI.items.Containers": "Containers",
   "CRUCESIGNATI.items.Armors": "Armature",
   "CRUCESIGNATI.items.Weight": "Peso",
   "CRUCESIGNATI.items.Qualities": "Qualità",
@@ -314,7 +316,5 @@
   "CRUCESIGNATI.reaction.Unfriendly": "{name} non è Amichevole",
   "CRUCESIGNATI.reaction.Neutral": "{name} è Neutrale",
   "CRUCESIGNATI.reaction.Indifferent": "{name} è Indifferente",
-  "CRUCESIGNATI.reaction.Friendly": "{name} è Amichevole",
-
-  "CRUCESIGNATI.roll.individualInit": "{name} tira per l'iniziativa!"
+  "CRUCESIGNATI.reaction.Friendly": "{name} è Amichevole"
 }

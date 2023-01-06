@@ -8,39 +8,46 @@ export class CrucesignatiActor extends Actor {
 
   prepareData() {
     super.prepareData();
-    const data = this.data.data;
+    const data = this.system;
 
     // Compute modifiers from actor scores
     this.computeModifiers();
-    this._isSlow();
     this.computeAC();
     this.computeEncumbrance();
     this.computeTreasure();
 
     // Determine Initiative
-    if (this.data.type == "character") {
-      data.initiative.value += data.scores.dex.mod2;
+    if (this.type == "character") {
+      if (data.initiative){
+        data.initiative.value = data.scores.dex.mod2;
+      } else {
+        data.initiative = {value: 0};
+      }
+
     } else {
-      data.initiative.value = 0;
+      if (data.initiative){
+        data.initiative.value = 0;
+      } else {
+        data.initiative = {value: 0}
+      }
     }
-    
-    
+
     data.movement.encounter = data.movement.base;
   }
 
   static async update(data, options = {}) {
     // Compute AAC from AC
-    if (data.data?.ac?.value) {
-      data.data.aac = { value: 19 - data.data.ac.value };
-    } else if (data.data?.aac?.value) {
-      data.data.ac = { value: 19 - data.data.aac.value };
+    if (data.system?.ac?.value) {
+      data.system.aac = { value: 19 - data.system.ac.value };
+    } else if (data.system?.aac?.value) {
+      data.system.ac = { value: 19 - data.system.aac.value };
     }
 
     // Compute Attacco from BBA
-    if (data.data?.thac0?.value) {
-      data.data.thac0.bba = 19 - data.data.thac0.value;
-    } else if (data.data?.thac0?.bba) {
-      data.data.thac0.value = 19 - data.data.thac0.bba;
+    if (data.system?.thac0?.value) {
+      data.system.thac0.bba = 19 - data.system.thac0.value;
+    } else if (data.system?.thac0?.bba) {
+      data.system.thac0.value = 19 - data.system.thac0.bba;
     }
 
     super.update(data, options);
@@ -59,14 +66,14 @@ export class CrucesignatiActor extends Actor {
   /*  Socket Listeners and Handlers
     /* -------------------------------------------- */
   getExperience(value, options = {}) {
-    if (this.data.type != "character") {
+    if (this.type !== "character") {
       return;
     }
     let modified = Math.floor(
-      value + (this.data.data.details.xp.bonus * value) / 100
+      value + (this.system.details.xp.bonus * value) / 100
     );
     return this.update({
-      "data.details.xp.value": modified + this.data.data.details.xp.value,
+      "data.details.xp.value": modified + this.system.details.xp.value,
     }).then(() => {
       const speaker = ChatMessage.getSpeaker({ actor: this });
       ChatMessage.create({
@@ -80,19 +87,19 @@ export class CrucesignatiActor extends Actor {
   }
 
   isNew() {
-    const data = this.data.data;
-    if (this.data.type == "character") {
+    const data = this.system;
+    if (this.type === "character") {
       let ct = 0;
       Object.values(data.scores).forEach((el) => {
         ct += el.value;
       });
-      return ct == 0 ? true : false;
-    } else if (this.data.type == "monster") {
+      return ct === 0 ? true : false;
+    } else if (this.type === "monster") {
       let ct = 0;
       Object.values(data.saves).forEach((el) => {
         ct += el.value;
       });
-      return ct == 0 ? true : false;
+      return ct === 0 ? true : false;
     }
   }
 
@@ -139,9 +146,9 @@ export class CrucesignatiActor extends Actor {
   /* -------------------------------------------- */
 
   rollHP(options = {}) {
-    let roll = new Roll(this.data.data.hp.hd).roll({ async: false });
+    let roll = new Roll(this.system.hp.hd).roll({ async: false });
     return this.update({
-      data: {
+      system: {
         hp: {
           max: roll.total,
           value: roll.total,
@@ -155,12 +162,12 @@ export class CrucesignatiActor extends Actor {
     const rollParts = ["1d20"];
 
     const data = {
-      actor: this.data,
+      actor: this,
       roll: {
         type: "above",
-        target: this.data.data.saves[save].value,
+        target: this.system.saves[save].value,
         magic:
-          this.data.type === "character" ? this.data.data.scores.wis.mod : 0,
+          this.type === "character" ? this.system.scores.wis.mod : 0,
       },
       details: game.i18n.format("CRUCESIGNATI.roll.details.save", { save: label }),
     };
@@ -168,13 +175,13 @@ export class CrucesignatiActor extends Actor {
     let skip = options?.event?.ctrlKey || options.fastForward;
 
     const rollMethod =
-      this.data.type == "character" ? CrucesignatiDice.RollSave : CrucesignatiDice.Roll;
+      this.type === "character" ? CrucesignatiDice.RollSave : CrucesignatiDice.Roll;
 
     // Roll and return
     return rollMethod({
       event: options.event,
       parts: rollParts,
-      data: data,
+      system: data,
       skipDialog: skip,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: game.i18n.format("CRUCESIGNATI.roll.save", { save: label }),
@@ -187,10 +194,10 @@ export class CrucesignatiActor extends Actor {
     const rollParts = ["1d20"];
 
     const data = {
-      actor: this.data,
+      actor: this,
       roll: {
         type: "below",
-        target: this.data.data.details.morale,
+        target: this.system.details.morale,
       },
     };
 
@@ -198,7 +205,7 @@ export class CrucesignatiActor extends Actor {
     return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
-      data: data,
+      system: data,
       skipDialog: true,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: game.i18n.localize("CRUCESIGNATI.roll.morale"),
@@ -211,10 +218,10 @@ export class CrucesignatiActor extends Actor {
     const rollParts = ["2d6"];
 
     const data = {
-      actor: this.data,
+      actor: this,
       roll: {
         type: "below",
-        target: this.data.data.retainer.loyalty,
+        target: this.system.retainer.loyalty,
       },
     };
 
@@ -222,7 +229,7 @@ export class CrucesignatiActor extends Actor {
     return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
-      data: data,
+      system: data,
       skipDialog: true,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: label,
@@ -234,24 +241,24 @@ export class CrucesignatiActor extends Actor {
     const rollParts = ["2d6"];
 
     const data = {
-      actor: this.data,
+      actor: this,
       roll: {
         type: "table",
         table: {
           2: game.i18n.format("CRUCESIGNATI.reaction.Hostile", {
-            name: this.data.name,
+            name: this.name,
           }),
           3: game.i18n.format("CRUCESIGNATI.reaction.Unfriendly", {
-            name: this.data.name,
+            name: this.name,
           }),
           6: game.i18n.format("CRUCESIGNATI.reaction.Neutral", {
-            name: this.data.name,
+            name: this.name,
           }),
           9: game.i18n.format("CRUCESIGNATI.reaction.Indifferent", {
-            name: this.data.name,
+            name: this.name,
           }),
           12: game.i18n.format("CRUCESIGNATI.reaction.Friendly", {
-            name: this.data.name,
+            name: this.name,
           }),
         },
       },
@@ -263,7 +270,7 @@ export class CrucesignatiActor extends Actor {
     return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
-      data: data,
+      system: data,
       skipDialog: skip,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: game.i18n.localize("CRUCESIGNATI.reaction.check"),
@@ -276,10 +283,10 @@ export class CrucesignatiActor extends Actor {
     const rollParts = ["1d20"];
 
     const data = {
-      actor: this.data,
+      actor: this,
       roll: {
         type: "check",
-        target: this.data.data.scores[score].value,
+        target: this.system.scores[score].value,
       },
 
       details: game.i18n.format("CRUCESIGNATI.roll.details.attribute", {
@@ -293,7 +300,7 @@ export class CrucesignatiActor extends Actor {
     return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
-      data: data,
+      system: data,
       skipDialog: skip,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: game.i18n.format("CRUCESIGNATI.roll.attribute", { attribute: label }),
@@ -304,13 +311,13 @@ export class CrucesignatiActor extends Actor {
 
   rollHitDice(options = {}) {
     const label = game.i18n.localize(`CRUCESIGNATI.roll.hd`);
-    const rollParts = [this.data.data.hp.hd];
-    if (this.data.type == "character") {
-      rollParts.push(this.data.data.scores.con.mod);
+    const rollParts = [this.system.hp.hd];
+    if (this.type === "character") {
+      rollParts.push(this.system.scores.con.mod);
     }
 
     const data = {
-      actor: this.data,
+      actor: this,
       roll: {
         type: "hitdice",
       },
@@ -320,7 +327,7 @@ export class CrucesignatiActor extends Actor {
     return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
-      data: data,
+      system: data,
       skipDialog: true,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: label,
@@ -331,15 +338,15 @@ export class CrucesignatiActor extends Actor {
   rollAppearing(options = {}) {
     const rollParts = [];
     let label = "";
-    if (options.check == "wilderness") {
-      rollParts.push(this.data.data.details.appearing.w);
+    if (options.check === "wilderness") {
+      rollParts.push(this.system.details.appearing.w);
       label = "(2)";
     } else {
-      rollParts.push(this.data.data.details.appearing.d);
+      rollParts.push(this.system.details.appearing.d);
       label = "(1)";
     }
     const data = {
-      actor: this.data,
+      actor: this,
       roll: {
         type: {
           type: "appearing",
@@ -351,7 +358,7 @@ export class CrucesignatiActor extends Actor {
     return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
-      data: data,
+      system: data,
       skipDialog: true,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: game.i18n.format("CRUCESIGNATI.roll.appearing", { type: label }),
@@ -364,10 +371,10 @@ export class CrucesignatiActor extends Actor {
     const rollParts = ["1d6"];
 
     const data = {
-      actor: this.data,
+      actor: this,
       roll: {
         type: "below",
-        target: this.data.data.exploration[expl],
+        target: this.system.exploration[expl],
         blindroll: true,
       },
       details: game.i18n.format("CRUCESIGNATI.roll.details.exploration", {
@@ -381,7 +388,7 @@ export class CrucesignatiActor extends Actor {
     return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
-      data: data,
+      system: data,
       skipDialog: skip,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: game.i18n.format("CRUCESIGNATI.roll.exploration", { exploration: label }),
@@ -390,10 +397,10 @@ export class CrucesignatiActor extends Actor {
   }
 
   rollDamage(attData, options = {}) {
-    const data = this.data.data;
+    const data = this.system;
 
     const rollData = {
-      actor: this.data,
+      actor: this,
       item: attData.item,
       roll: {
         type: "damage",
@@ -414,7 +421,7 @@ export class CrucesignatiActor extends Actor {
     CrucesignatiDice.Roll({
       event: options.event,
       parts: dmgParts,
-      data: rollData,
+      system: rollData,
       skipDialog: true,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${attData.label} - ${game.i18n.localize("CRUCESIGNATI.Damage")}`,
@@ -437,11 +444,11 @@ export class CrucesignatiActor extends Actor {
   }
 
   rollAttack(attData, options = {}) {
-    const data = this.data.data;
+    const data = this.system;
     const rollParts = ["1d20"];
     const dmgParts = [];
     let label = game.i18n.format("CRUCESIGNATI.roll.attacks", {
-      name: this.data.name,
+      name: this.name,
     });
     if (!attData.item) {
       dmgParts.push("1d3");
@@ -449,34 +456,35 @@ export class CrucesignatiActor extends Actor {
       label = game.i18n.format("CRUCESIGNATI.roll.attacksWith", {
         name: attData.item.name,
       });
-      dmgParts.push(attData.item.data.damage);
+      dmgParts.push(attData.item.system.damage);
     }
 
     let ascending = game.settings.get("crucesignati", "ascendingAC");
     if (ascending) {
       rollParts.push(data.thac0.bba.toString());
     }
-    if (options.type == "missile") {
+    if (options.type === "missile") {
       rollParts.push(
         data.scores.dex.mod.toString(),
         data.thac0.mod.missile.toString()
       );
-    } else if (options.type == "melee") {
+    } else if (options.type === "melee") {
       rollParts.push(
         data.scores.str.mod.toString(),
         data.thac0.mod.melee.toString()
       );
     }
-    if (attData.item && attData.item.data.bonus) {
-      rollParts.push(attData.item.data.bonus);
+    // console.log(attData.item)
+    if (attData.item && attData.item.system.bonus) {
+      rollParts.push(attData.item.system.bonus);
     }
     // aggiungi il modificatore forza al danno
     let thac0 = data.thac0.value;
-    if (options.type == "melee") {
+    if (options.type === "melee") {
       dmgParts.push(data.scores.str.mod2);
     }
     const rollData = {
-      actor: this.data,
+      actor: this,
       item: attData.item,
       roll: {
         type: options.type,
@@ -491,7 +499,7 @@ export class CrucesignatiActor extends Actor {
     return CrucesignatiDice.Roll({
       event: options.event,
       parts: rollParts,
-      data: rollData,
+      system: rollData,
       skipDialog: options.skipDialog,
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: label,
@@ -501,7 +509,7 @@ export class CrucesignatiActor extends Actor {
 
   async applyDamage(amount = 0, multiplier = 1) {
     amount = Math.floor(parseInt(amount) * multiplier);
-    const hp = this.data.data.hp;
+    const hp = this.system.hp;
 
     // Remaining goes to health
     const dh = Math.clamped(hp.value - amount, 0, hp.max);
@@ -522,40 +530,27 @@ export class CrucesignatiActor extends Actor {
     return output;
   }
 
-  _isSlow() {
-    this.data.data.isSlow = ![...this.data.items.values()].every((item) => {
-      if (
-        item.type !== "weapon" ||
-        !item.data.data.slow ||
-        !item.data.data.equipped
-      ) {
-        return true;
-      }
-      return false;
-    });
-  }
-
   computeEncumbrance() {
-    if (this.data.type != "character") {
+    if (this.type != "character") {
       return;
     }
-    const data = this.data.data;
+    const data = this.system;
     let option = game.settings.get("crucesignati", "encumbranceOption");
-    const items = [...this.data.items.values()];
+    const items = [...this.items.values()];
     // Compute encumbrance
     const hasItems = items.every((item) => {
-      return item.type != "item" && !item.data.treasure;
+      return item.type !== "item" && !item.system.treasure;
     });
 
     let totalWeight = items.reduce((acc, item) => {
       if (
         item.type === "item" &&
-        (["complete", "disabled"].includes(option) || item.data.data.treasure)
+        (["complete", "disabled"].includes(option) || item.system.treasure)
       ) {
-        return acc + item.data.data.quantity.value * item.data.data.weight;
+        return acc + item.system.quantity.value * item.system.weight;
       }
       if (["weapon", "armor", "container"].includes(item.type) && option !== "basic") {
-        return acc + item.data.data.weight;
+        return acc + item.system.weight;
       }
       return acc;
     }, 0);
@@ -579,7 +574,7 @@ export class CrucesignatiActor extends Actor {
   }
 
   _calculateMovement() {
-    const data = this.data.data;
+    const data = this.system;
     let weight = data.encumbrance.value;
     let leggero = data.scores.str.mod4;
     let medio = data.scores.str.mod5;
@@ -613,26 +608,26 @@ export class CrucesignatiActor extends Actor {
   }
 
   computeTreasure() {
-    if (this.data.type != "character") {
+    if (this.type !== "character") {
       return;
     }
-    const data = this.data.data;
+    const data = this.system;
     // Compute treasure
     let total = 0;
-    let treasure = this.data.items.filter(
-      (i) => i.type == "item" && i.data.data.treasure
+    let treasure = this.items.filter(
+      (i) => i.type === "item" && i.system.treasure
     );
     treasure.forEach((item) => {
-      total += item.data.data.quantity.value * item.data.data.cost;
+      total += item.system.quantity.value * item.system.cost;
     });
     data.treasure = Math.round(total * 100) / 100.0;
   }
 
   computeAC() {
-    if (this.data.type != "character") {
+    if (this.type !== "character") {
       return;
     }
-    const data = this.data.data;
+    const data = this.system;
 
 // Compute AC
 let baseAc = 10;
@@ -642,11 +637,11 @@ let AacShield = 0;
 
 data.aac.naked = baseAac + data.scores.dex.mod;
 data.ac.naked = baseAc + data.scores.dex.mod2;
-const armors = this.data.items.filter((i) => i.type == "armor");
+const armors = this.items.filter((i) => i.type === "armor");
 armors.forEach((a) => {
-  const armorData = a.data.data;
+  const armorData = a.system;
   if (!armorData.equipped) return;
-  if (armorData.type == "shield") {
+  if (armorData.type === "shield") {
     AcShield = armorData.ac.value;
     AacShield = armorData.aac.value;
     return
@@ -661,11 +656,10 @@ data.aac.shield = AacShield;
 }
 
   computeModifiers() {
-    if (this.data.type != "character") {
+    if (this.type !== "character") {
       return;
     }
-    const data = this.data.data;
-
+    const data = this.system;
     //Non la uso perchè ho modificato manualmente
     const standard = {
       0: -3,
@@ -678,7 +672,7 @@ data.aac.shield = AacShield;
       18: 3,
     };
 //Modifica al colpire in mischia
-if (data.details.straordinaryStrenght == 0) {
+if (data.details.straordinaryStrenght === 0) {
   data.scores.str.mod = CrucesignatiActor._valueFromTable(
     {
       1: -5,
@@ -703,7 +697,7 @@ if (data.details.straordinaryStrenght == 0) {
   );
 };
 //Modifica ai danni in mischia
-if (data.details.straordinaryStrenght == 0) {
+if (data.details.straordinaryStrenght === 0) {
   data.scores.str.mod2 = CrucesignatiActor._valueFromTable(
     {
       1: -2,
@@ -728,7 +722,7 @@ if (data.details.straordinaryStrenght == 0) {
 };
 
 //Ingombro leggero in base alla For
-if (data.details.straordinaryStrenght == 0) {
+if (data.details.straordinaryStrenght === 0) {
   data.scores.str.mod4 = CrucesignatiActor._valueFromTable(
     {
       1: 5,
@@ -757,7 +751,7 @@ if (data.details.straordinaryStrenght == 0) {
 };
 
 //Ingombro medio in base alla For
-if (data.details.straordinaryStrenght == 0) {
+if (data.details.straordinaryStrenght === 0) {
   data.scores.str.mod5 = CrucesignatiActor._valueFromTable(
     {
       1: 6,
@@ -786,7 +780,7 @@ if (data.details.straordinaryStrenght == 0) {
 };
 
 //Ingombro pesante in base alla For
-if (data.details.straordinaryStrenght == 0) {
+if (data.details.straordinaryStrenght === 0) {
   data.scores.str.mod6 = CrucesignatiActor._valueFromTable(
     {
       1: 8,
@@ -815,7 +809,7 @@ if (data.details.straordinaryStrenght == 0) {
 };
 
 //Massima capacità di carico (ingombro), in base alla For
-if (data.details.straordinaryStrenght == 0) {
+if (data.details.straordinaryStrenght === 0) {
   data.scores.str.mod3 = CrucesignatiActor._valueFromTable(
     {
       1: 9,

@@ -1,7 +1,9 @@
 import { CrucesignatiPartySheet } from "./dialog/party-sheet.js";
 
 export const addControl = (object, html) => {
-    let control = `<button class='crucesignati-party-sheet' type="button" title='${game.i18n.localize('CRUCESIGNATI.dialog.partysheet')}'><i class='fas fa-users'></i></button>`;
+    let control = `<button class='crucesignati-party-sheet' type="button" title='${game.i18n.localize('CRUCESIGNATI.dialog.partysheet')}'>
+<i class='fas fa-users'></i>
+</button>`;
     html.find(".fas.fa-search").replaceWith($(control))
     html.find('.crucesignati-party-sheet').click(ev => {
         showPartySheet(object);
