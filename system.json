@@ -4,12 +4,12 @@
   "title": "Crucesignati Old School Gaming",
   "description": "Compatibile con FG&G",
   "version": "6.0.0",
-  "minimumCoreVersion" : "10.288",
-  "compatibleCoreVersion" : 10,
+  "minimumCoreVersion" : "10",
+  "compatibleCoreVersion" : 11,
   "compatibility": {
-    "minimum": "0.6.2",
-    "verified": "10",
-    "maximum": "10"
+    "minimum": "10",
+    "verified": "11",
+    "maximum": "11"
   },
   "templateVersion": 1,
   "author": "Giovanni Gori",
@@ -37,7 +37,7 @@
   "gridDistance": 1,
   "gridUnits": "mt",
   "url": "https://github.com/Giova84ish/crucesignati",
-  "manifest": "https://github.com/Giova84ish/crucesignati/releases/download/6.0.0/system.json",
+  "manifest": "https://github.com/Giova84ish/crucesignati/releases/download/6.0.1/system.json",
   "license": "OGL.txt",
-  "download": "https://github.com/Giova84ish/crucesignati/releases/download/6.0.0/crucesignati.zip"
+  "download": "https://github.com/Giova84ish/crucesignati/releases/download/6.0.1/crucesignati.zip"
 }
