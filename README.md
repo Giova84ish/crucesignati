@@ -1,4 +1,9 @@
-# crucesignati
-Crucesignati Old School RPG is an italian RPG designed to be compatible with FG&G and the second edition of the most famous RPG. You can also use it with the crucesignati-content module that includes many companions useful for GM and players. 
+# crucesignati EN
+Crucesignati Old School RPG is an italian RPG built to be compatible with "For Gold & Glory" and the second edition of the most famous RPG. It is based on the OGL.
 
-The core system is available in Italian and English and the module is available only in Italian. The manual is also available on DriveThruRPG: https://www.drivethrurpg.com/product/381022/Cruce-signati
+There are some small differences between this system and FG&G based on the rules I use for my homebrew campaign.
+
+# crucesignati IT
+Crucesignati Old School RPG è un adattamento italiano delle regole di "For Gold & Glory", compatibile con la seconda edizione del gioco di ruolo più conosciuto. È basato su materiale OGL.
+
+Ci sono delle piccole differenze tra queste regole e FG&G, dovute a quelle che uso nelle mie campagne. Chi vuole può scaricare queste regole da DriveThruRPG.
